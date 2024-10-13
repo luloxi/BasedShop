@@ -27,7 +27,7 @@ export function OnchainKitSwap() {
   const swappableTokens: Token[] = [ETHToken, USDCToken];
 
   return address ? (
-    <Swap address={address}>
+    <Swap>
       <SwapAmountInput label="Sell" swappableTokens={swappableTokens} token={ETHToken} type="from" />
       <SwapToggleButton />
       <SwapAmountInput label="Buy" swappableTokens={swappableTokens} token={USDCToken} type="to" />
