@@ -6,7 +6,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
-    PunkPosts: {
+    BasedArticles: {
       address: "0x700b6A60ce7EaaEA56F065753d8dcB9653dbAD35",
       abi: [
         {
@@ -707,7 +707,7 @@ const deployedContracts = {
           "lib/openzeppelin-contracts/contracts/access/Ownable.sol",
       },
     },
-    PunkProfile: {
+    BasedProfile: {
       address: "0xA15BB66138824a1c7167f5E85b957d04Dd34E468",
       abi: [
         {
@@ -881,12 +881,25 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "_punkPosts",
+              name: "_basedArticles",
               type: "address",
               internalType: "address",
             },
           ],
           stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "basedArticles",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract BasedArticles",
+            },
+          ],
+          stateMutability: "view",
         },
         {
           type: "function",
@@ -1100,26 +1113,13 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "punkPosts",
-          inputs: [],
-          outputs: [
-            {
-              name: "",
-              type: "address",
-              internalType: "contract PunkPosts",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
           name: "punkProfile",
           inputs: [],
           outputs: [
             {
               name: "",
               type: "address",
-              internalType: "contract PunkProfile",
+              internalType: "contract BasedProfile",
             },
           ],
           stateMutability: "view",
@@ -1178,7 +1178,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "userPosts",
+          name: "userArticles",
           inputs: [
             {
               name: "",
@@ -1274,6 +1274,30 @@ const deployedContracts = {
         },
         {
           type: "function",
+          name: "userToSharedArticles",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "sharedArticles",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
           name: "userToSharedPostIndex",
           inputs: [
             {
@@ -1290,30 +1314,6 @@ const deployedContracts = {
           outputs: [
             {
               name: "index",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "userToSharedPosts",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "sharedPosts",
               type: "uint256",
               internalType: "uint256",
             },

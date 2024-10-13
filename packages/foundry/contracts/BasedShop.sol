@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import { PunkProfile } from "./PunkProfile.sol";
-import { PunkPosts } from "./PunkPosts.sol";
+import { BasedProfile } from "./BasedProfile.sol";
+import { BasedArticles } from "./BasedArticles.sol";
 // import { EIP712 } from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 // import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
@@ -61,11 +61,11 @@ contract BasedShop {
   //////////////////////////////////////////////////////////////*/
 
   uint256 public postIds;
-  PunkProfile public punkProfile;
-  PunkPosts public punkPosts;
+  BasedProfile public punkProfile;
+  BasedArticles public basedArticles;
 
   mapping(uint256 => address) public postIdToUser;
-  mapping(address => uint256[]) public userPosts;
+  mapping(address => uint256[]) public userArticles;
 
   // Likes
   mapping(uint256 post => uint256 likes) public postToLikes;
@@ -78,7 +78,7 @@ contract BasedShop {
     postCommentToUser;
 
   // Shared
-  mapping(address user => uint256[] sharedPosts) public userToSharedPosts;
+  mapping(address user => uint256[] sharedArticles) public userToSharedArticles;
   mapping(address user => mapping(uint256 post => uint256 index)) public
     userToSharedPostIndex;
 
@@ -92,9 +92,9 @@ contract BasedShop {
                             CONSTRUCTOR FUNCTION
   //////////////////////////////////////////////////////////////*/
 
-  constructor(address _punkProfile, address _punkPosts) {
-    punkProfile = PunkProfile(_punkProfile);
-    punkPosts = PunkPosts(_punkPosts);
+  constructor(address _punkProfile, address _basedArticles) {
+    punkProfile = BasedProfile(_punkProfile);
+    basedArticles = BasedArticles(_basedArticles);
   }
 
   /*//////////////////////////////////////////////////////////////
@@ -106,9 +106,9 @@ contract BasedShop {
   ) public {
     uint256 postId = postIds++;
     postIdToUser[postId] = msg.sender;
-    userPosts[msg.sender].push(postId);
+    userArticles[msg.sender].push(postId);
 
-    punkPosts.mint(_tokenURI);
+    basedArticles.mint(_tokenURI);
 
     emit PostCreated(postId, msg.sender, _tokenURI, block.timestamp);
   }
@@ -118,7 +118,7 @@ contract BasedShop {
   ) public {
     require(postIdToUser[_postId] == msg.sender, "Not the owner of the post");
 
-    punkPosts.burn(_postId);
+    basedArticles.burn(_postId);
 
     emit PostDeleted(_postId, block.timestamp);
   }
@@ -175,9 +175,9 @@ contract BasedShop {
     uint256 _postID
   ) public {
     _requirePostExists(_postID);
-    userToSharedPosts[msg.sender].push(_postID);
+    userToSharedArticles[msg.sender].push(_postID);
     // userToSharedPostIndex[msg.sender][_postID] =
-    //   userToSharedPosts[msg.sender].length - 1;
+    //   userToSharedArticles[msg.sender].length - 1;
     emit PostShared(_postID, msg.sender, block.timestamp);
   }
 
@@ -190,7 +190,7 @@ contract BasedShop {
     uint256 index = userToSharedPostIndex[msg.sender][_postID];
 
     // Set the post to a default value (e.g., 0)
-    userToSharedPosts[msg.sender][index] = 0;
+    userToSharedArticles[msg.sender][index] = 0;
 
     // Delete the index entry for the deleted post
     delete userToSharedPostIndex[msg.sender][_postID];
@@ -241,6 +241,6 @@ contract BasedShop {
   function _requirePostExists(
     uint256 _postID
   ) internal view {
-    require(punkPosts.tokenId() >= _postID, "Post does not exist");
+    require(basedArticles.tokenId() >= _postID, "Post does not exist");
   }
 }

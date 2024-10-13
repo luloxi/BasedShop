@@ -31,14 +31,14 @@ const ProfilePage: NextPage = () => {
   const [bio, setBio] = useState("");
   const [profilePicture, setProfilePicture] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false); // New state for edit mode
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [articles, setArticles] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
   const [page, setPage] = useState(1); // Start from page 1 to get the last post first
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [activeTab, setActiveTab] = useState("Minted");
 
-  const projectId = "d5652b8b-5d14-4478-9aa2-42941761cf34";
+  const projectId = process.env.NEXT_PUBLIC_CDP_PROJECT_ID ? process.env.NEXT_PUBLIC_CDP_PROJECT_ID : "";
   const { address: connectedAddress } = useAccount();
 
   const onrampBuyUrl = getOnrampBuyUrl({
@@ -46,8 +46,8 @@ const ProfilePage: NextPage = () => {
     addresses: connectedAddress ? { [connectedAddress]: ["base"] } : {},
     // assets: ["ETH", "USDC"],
     assets: ["ETH"],
-    presetFiatAmount: 20,
-    fiatCurrency: "USD",
+    // presetFiatAmount: 20,
+    // fiatCurrency: "USD",
   });
 
   const handleTabClick = (tab: any) => {
@@ -60,13 +60,13 @@ const ProfilePage: NextPage = () => {
   const address = pathname.split("/").pop();
 
   const { data: punkProfile } = useScaffoldReadContract({
-    contractName: "PunkProfile",
+    contractName: "BasedProfile",
     functionName: "profiles",
     args: [address],
     watch: true,
   });
 
-  const { writeContractAsync: punkProfileWriteAsync } = useScaffoldWriteContract("PunkProfile");
+  const { writeContractAsync: punkProfileWriteAsync } = useScaffoldWriteContract("BasedProfile");
 
   const {
     data: createEvents,
@@ -102,7 +102,7 @@ const ProfilePage: NextPage = () => {
     }
   };
 
-  const fetchPosts = useCallback(
+  const fetchArticles = useCallback(
     async (page: number) => {
       if (!createEvents) return;
 
@@ -113,7 +113,7 @@ const ProfilePage: NextPage = () => {
         const end = page * 8;
         const eventsToFetch = createEvents.slice(start, end);
 
-        const postsUpdate: Post[] = [];
+        const articlesUpdate: Post[] = [];
 
         for (const event of eventsToFetch) {
           try {
@@ -134,21 +134,21 @@ const ProfilePage: NextPage = () => {
               continue;
             }
 
-            postsUpdate.push({
+            articlesUpdate.push({
               listingId: undefined,
               uri: tokenURI,
               user: user || "",
               ...nftMetadata,
             });
           } catch (e) {
-            notification.error("Error fetching posts");
+            notification.error("Error fetching articles");
             console.error(e);
           }
         }
 
-        setPosts(prevPosts => [...prevPosts, ...postsUpdate]);
+        setArticles(prevArticles => [...prevArticles, ...articlesUpdate]);
       } catch (error) {
-        notification.error("Failed to load posts");
+        notification.error("Failed to load articles");
       } finally {
         setLoadingMore(false);
       }
@@ -158,8 +158,8 @@ const ProfilePage: NextPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetchPosts(page).finally(() => setLoading(false));
-  }, [page, fetchPosts]);
+    fetchArticles(page).finally(() => setLoading(false));
+  }, [page, fetchArticles]);
 
   const lastPostElementRef = useCallback(
     (node: any) => {
@@ -233,8 +233,9 @@ const ProfilePage: NextPage = () => {
                         <div>
                           <RainbowKitCustomConnectButton />
                         </div>
-
-                        <FundButton fundingUrl={onrampBuyUrl} />
+                        <div className="bg-base-200 rounded-lg">
+                          <FundButton fundingUrl={onrampBuyUrl} />
+                        </div>
                       </div>
                     ) : (
                       <div className="text-base-content">
@@ -311,7 +312,7 @@ const ProfilePage: NextPage = () => {
             Revenue
           </button>
         </div>
-        <NewsFeed posts={posts} />
+        <NewsFeed articles={articles} />
         <div ref={lastPostElementRef}></div>
         {loadingMore && <LoadingBars />}
       </div>

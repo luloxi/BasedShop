@@ -25,7 +25,7 @@ export const ProfileAddress = ({ address, disableAddressLink, format, size = "ba
   const { targetNetwork } = useTargetNetwork();
 
   const { data: profileInfo } = useScaffoldReadContract({
-    contractName: "PunkProfile",
+    contractName: "BasedProfile",
     functionName: "profiles",
     args: [address],
     watch: true,

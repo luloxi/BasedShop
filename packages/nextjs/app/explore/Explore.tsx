@@ -17,7 +17,7 @@ export interface Post extends Partial<NFTMetaData> {
 }
 
 export const Explore = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [articles, setArticles] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(0);
@@ -40,7 +40,7 @@ export const Explore = () => {
     watch: true,
   });
 
-  const fetchPosts = useCallback(
+  const fetchArticles = useCallback(
     async (page: number) => {
       if (!createEvents) return;
 
@@ -51,7 +51,7 @@ export const Explore = () => {
         const end = page * 8;
         const eventsToFetch = createEvents.slice(start, end);
 
-        const postsUpdate: Post[] = [];
+        const articlesUpdate: Post[] = [];
 
         for (const event of eventsToFetch) {
           try {
@@ -63,21 +63,21 @@ export const Explore = () => {
             const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
             const nftMetadata: NFTMetaData = await getMetadataFromIPFS(ipfsHash);
 
-            postsUpdate.push({
+            articlesUpdate.push({
               postId: parseInt(event.args?.postId?.toString() ?? "0"),
               uri: tokenURI,
               user: user || "",
               ...nftMetadata,
             });
           } catch (e) {
-            notification.error("Error fetching posts");
+            notification.error("Error fetching articles");
             console.error(e);
           }
         }
 
-        setPosts(prevPosts => [...prevPosts, ...postsUpdate]);
+        setArticles(prevArticles => [...prevArticles, ...articlesUpdate]);
       } catch (error) {
-        notification.error("Failed to load posts");
+        notification.error("Failed to load articles");
       } finally {
         setLoadingMore(false);
       }
@@ -87,8 +87,8 @@ export const Explore = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetchPosts(page).finally(() => setLoading(false));
-  }, [page, fetchPosts]);
+    fetchArticles(page).finally(() => setLoading(false));
+  }, [page, fetchArticles]);
 
   const lastPostElementRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -131,7 +131,7 @@ export const Explore = () => {
           Groups
         </button>
       </div>
-      <NewsFeed posts={posts} isGrid={false} />
+      <NewsFeed articles={articles} isGrid={false} />
       <div ref={lastPostElementRef}></div>
       {loadingMore && <LoadingBars />}
     </div>

@@ -17,7 +17,7 @@ export const Footer = () => {
   const { address: connectedAddress } = useAccount();
 
   const { data: punkProfile } = useScaffoldReadContract({
-    contractName: "PunkProfile",
+    contractName: "BasedProfile",
     functionName: "profiles",
     args: [connectedAddress],
     watch: true,

@@ -13,7 +13,7 @@ export const Search = () => {
   const router = useRouter();
 
   const { data: nameToAddress } = useScaffoldReadContract({
-    contractName: "PunkProfile",
+    contractName: "BasedProfile",
     functionName: "nameToAddress",
     args: [searchQuery],
     watch: true,

@@ -10,10 +10,10 @@ import { ERC721URIStorage } from
   "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract PunkPosts is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract BasedArticles is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
   uint256 public tokenId; // Replaces the Counters.Counter
 
-  constructor() ERC721("PunkPosts", "PP") Ownable(msg.sender) { }
+  constructor() ERC721("BasedArticles", "PP") Ownable(msg.sender) { }
 
   function mint(
     string memory _tokenURI

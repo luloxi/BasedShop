@@ -3,13 +3,13 @@ import { Post } from "../../app/explore/Explore";
 import { PostCard } from "./PostCard";
 
 type NewsFeedProps = {
-  posts: Post[];
+  articles: Post[];
   isGrid?: boolean; // Optional prop to control grid layout
 };
 
-export const NewsFeed: React.FC<NewsFeedProps> = ({ posts, isGrid = false }) => {
+export const NewsFeed: React.FC<NewsFeedProps> = ({ articles, isGrid = false }) => {
   return (
-    <div className="mt-4 md:flex md:justify-center md:items-center md:px-6 md:border-x-2">
+    <div className="mt-4 md:flex md:justify-center md:items-center md:px-6 md:border-x-2 dark:border-white border-black">
       <div
         className={`${
           isGrid
@@ -17,7 +17,7 @@ export const NewsFeed: React.FC<NewsFeedProps> = ({ posts, isGrid = false }) => 
             : "flex flex-col gap-3 w-[100%] md:w-[500px]"
         }`}
       >
-        {posts.map(post => (
+        {articles.map(post => (
           <PostCard post={post} key={post.uri} isGrid={isGrid} />
         ))}
       </div>

@@ -115,7 +115,7 @@ export const PostCard = ({ post, isGrid }: { post: Post; isGrid: boolean }) => {
               </button>
             </div>
             <div className="flex items-center gap-3">
-              <button className="px-4 py-2 rounded-lg bg-red-600 text-white">Mint</button>
+              <button className="px-4 py-2 rounded-lg bg-red-600 text-white">Buy</button>
               <button className="p-2 rounded-full bg-red-600 text-white">
                 <ShoppingCartIcon className="h-5 w-5" />
               </button>
