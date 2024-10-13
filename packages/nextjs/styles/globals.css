@@ -1,0 +1,233 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Added by Lulox */
+
+/* CSS Animations */
+@keyframes show {
+  0% {
+    transform: translateY(100%) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes hide {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%) scale(0);
+    opacity: 0;
+  }
+}
+
+.tabs-bar {
+  display: flex;
+  justify-content: center;
+  items-align: center;
+  padding-bottom: 7px;
+  border-bottom: 1px solid;
+  max-width: 500px;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.tab.active {
+  color: #2563eb; /* Blue text */
+}
+
+.comment-section-container {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comment-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.comment-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.comment-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.comment-button {
+  margin-left: 8px;
+  font-size: 16px;
+  border: none;
+
+  color: white;
+  border-radius: 50%; /* Make the button completely round */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.comment-button:hover {
+}
+
+.post-card-container {
+  margin-bottom: 16px; /* Add some space between posts */
+}
+
+.animate-show {
+  animation: show 0.5s forwards;
+}
+
+.animate-hide {
+  animation: hide 0.5s forwards;
+}
+
+.cool-button {
+  appearance: button;
+  background-color: #333333;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: din-round, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.cool-button:after {
+  background-clip: padding-box;
+  background-color: #444444;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.cool-button,
+.cool-button:focus {
+  user-select: auto;
+}
+
+.cool-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+
+.cool-button:disabled {
+  cursor: auto;
+}
+
+.cool-button:active {
+  border-width: 4px 0 0;
+  background: none;
+}
+
+.invert-colors {
+  filter: invert(100%);
+}
+
+.tab-active {
+  @apply bg-red-600 text-white;
+}
+
+.tab-bordered {
+  @apply border-x border-gray-500;
+}
+
+.function-button {
+  @apply bg-red-600 text-white border-none;
+}
+
+[data-theme="light"] .invert-colors {
+  filter: invert(100%);
+}
+
+[data-theme="dark"] .invert-colors {
+  filter: none;
+}
+
+/* End added by Lulox */
+
+:root,
+[data-theme] {
+  background: oklch(var(--b2));
+}
+
+body {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+p {
+  margin: 1rem 0;
+}
+
+.btn {
+  @apply shadow-md;
+}
+
+.btn.btn-ghost {
+  @apply shadow-none;
+}
