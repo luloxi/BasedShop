@@ -6,13 +6,7 @@ import { ErrorComponent } from "../../../components/punk-society/ErrorComponent"
 import { LoadingBars } from "../../../components/punk-society/LoadingBars";
 import { NewsFeed } from "../../../components/punk-society/NewsFeed";
 import ProfileInfo from "../_components/ProfileInfo";
-import ProfilePictureUpload from "../_components/ProfilePictureUpload";
-import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { PencilIcon } from "@heroicons/react/24/outline";
-import { Address, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
-import { InputBase } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { getMetadataFromIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
@@ -24,8 +18,6 @@ export interface Post extends Partial<NFTMetaData> {
   user: string;
   date?: string;
 }
-
-const defaultProfilePicture = "/guest-profile.jpg";
 
 const ProfilePage: NextPage = () => {
   const [articles, setArticles] = useState<Post[]>([]);
