@@ -57,6 +57,7 @@ export const Explore = () => {
           try {
             const user = event.args?.user;
             const tokenURI = event.args?.tokenURI;
+            const date = event.args?.timestamp;
 
             if (!tokenURI) continue;
 
@@ -67,6 +68,7 @@ export const Explore = () => {
               postId: parseInt(event.args?.postId?.toString() ?? "0"),
               uri: tokenURI,
               user: user || "",
+              date: date?.toString() || "",
               ...nftMetadata,
             });
           } catch (e) {
@@ -125,7 +127,7 @@ export const Explore = () => {
           Following
         </button>
       </div>
-      <NewsFeed articles={articles} isGrid={false} />
+      <NewsFeed articles={articles} />
       <div ref={lastPostElementRef}></div>
       {loadingMore && <LoadingBars />}
     </div>

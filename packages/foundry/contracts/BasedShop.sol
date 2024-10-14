@@ -17,70 +17,71 @@ contract BasedShop {
                                     EVENTS
   //////////////////////////////////////////////////////////////*/
 
-  event PostCreated(
-    uint256 indexed postId,
+  event ArticleCreated(
+    uint256 indexed articleId,
     address indexed user,
     string tokenURI,
-    uint256 timestamp
+    uint256 date
   );
-  event PostDeleted(uint256 indexed postId, uint256 timestamp);
-  event PostLiked(
-    uint256 indexed postID, address indexed user, uint256 timestamp
+  event ArticleDeleted(uint256 indexed articleId, uint256 date);
+  event ArticleLiked(
+    uint256 indexed articleID, address indexed user, uint256 date
   );
-  event PostUnliked(
-    uint256 indexed postID, address indexed user, uint256 timestamp
+  event ArticleUnliked(
+    uint256 indexed articleID, address indexed user, uint256 date
   );
-  event PostCommented(
-    uint256 indexed postID,
+  event ArticleCommented(
+    uint256 indexed articleID,
     address indexed user,
     string text,
     uint256 index,
-    uint256 timestamp
+    uint256 date
   );
-  event PostCommentDeleted(
-    uint256 indexed postID, address indexed user, uint256 timestamp
+  event ArticleCommentDeleted(
+    uint256 indexed articleID, address indexed user, uint256 date
   );
-  event PostShared(
-    uint256 indexed postID, address indexed user, uint256 timestamp
+  event ArticleBookmarked(
+    uint256 indexed articleID, address indexed user, uint256 date
   );
-  event PostUnshared(
-    uint256 indexed postID, address indexed user, uint256 timestamp
+  event ArticleUnshared(
+    uint256 indexed articleID, address indexed user, uint256 date
   );
   event UserFollowed(
-    address indexed user, address indexed follower, uint256 timestamp
+    address indexed user, address indexed follower, uint256 date
   );
   event UserUnfollowed(
-    address indexed user, address indexed follower, uint256 timestamp
+    address indexed user, address indexed follower, uint256 date
   );
   event FollowerRemoved(
-    address indexed user, address indexed follower, uint256 timestamp
+    address indexed user, address indexed follower, uint256 date
   );
 
   /*//////////////////////////////////////////////////////////////
                                 STATE VARIABLES
   //////////////////////////////////////////////////////////////*/
 
-  uint256 public postIds;
+  uint256 public articleIds;
   BasedProfile public punkProfile;
   BasedArticles public basedArticles;
 
-  mapping(uint256 => address) public postIdToUser;
+  mapping(uint256 => address) public articleIdToUser;
   mapping(address => uint256[]) public userArticles;
 
   // Likes
-  mapping(uint256 post => uint256 likes) public postToLikes;
-  mapping(address user => mapping(uint256 post => bool liked)) public
-    userToPostLikes;
+  mapping(uint256 article => uint256 likes) public articleToLikes;
+  mapping(address user => mapping(uint256 article => bool liked)) public
+    userToArticleLikes;
 
   // Comments
-  mapping(uint256 postId => Comment[]) public postToComments;
-  mapping(uint256 postId => mapping(uint256 commentId => address user)) public
-    postCommentToUser;
+  mapping(uint256 articleId => Comment[]) public articleToComments;
+  mapping(uint256 articleId => mapping(uint256 commentId => address user))
+    public articleCommentToUser;
 
-  // Shared
-  mapping(address user => uint256[] sharedArticles) public userToSharedArticles;
-  mapping(address user => mapping(uint256 post => uint256 index)) public
-    userToSharedPostIndex;
+  // Bookmarked
+  mapping(address user => uint256[] sharedArticles) public
+    userToBookmarkedArticles;
+  mapping(address user => mapping(uint256 article => uint256 index)) public
+    userToBookmarkedArticleIndex;
 
   // Following and Followers
   mapping(address user => mapping(address follower => bool isFollowing)) public
@@ -101,102 +102,106 @@ contract BasedShop {
                             EXTERNAL FUNCTIONS
    //////////////////////////////////////////////////////////////*/
 
-  function createPost(
+  function createArticle(
     string memory _tokenURI
   ) public {
-    uint256 postId = postIds++;
-    postIdToUser[postId] = msg.sender;
-    userArticles[msg.sender].push(postId);
+    uint256 articleId = articleIds++;
+    articleIdToUser[articleId] = msg.sender;
+    userArticles[msg.sender].push(articleId);
 
     basedArticles.mint(_tokenURI);
 
-    emit PostCreated(postId, msg.sender, _tokenURI, block.timestamp);
+    emit ArticleCreated(articleId, msg.sender, _tokenURI, block.timestamp);
   }
 
-  function deletePost(
-    uint256 _postId
+  function deleteArticle(
+    uint256 _articleId
   ) public {
-    require(postIdToUser[_postId] == msg.sender, "Not the owner of the post");
-
-    basedArticles.burn(_postId);
-
-    emit PostDeleted(_postId, block.timestamp);
-  }
-
-  function likePost(
-    uint256 _postID
-  ) public {
-    _requirePostExists(_postID);
     require(
-      !userToPostLikes[msg.sender][_postID], "You have already liked this post"
+      articleIdToUser[_articleId] == msg.sender, "Not the owner of the article"
     );
-    userToPostLikes[msg.sender][_postID] = true;
-    postToLikes[_postID]++;
-    emit PostLiked(_postID, msg.sender, block.timestamp);
+
+    basedArticles.burn(_articleId);
+
+    emit ArticleDeleted(_articleId, block.timestamp);
   }
 
-  function unlikePost(
-    uint256 _postID
+  function likeArticle(
+    uint256 _articleID
   ) public {
-    _requirePostExists(_postID);
+    _requireArticleExists(_articleID);
     require(
-      userToPostLikes[msg.sender][_postID], "You have not liked this post yet"
+      !userToArticleLikes[msg.sender][_articleID],
+      "You have already liked this article"
     );
-    userToPostLikes[msg.sender][_postID] = false;
-    postToLikes[_postID]--;
-    emit PostUnliked(_postID, msg.sender, block.timestamp);
+    userToArticleLikes[msg.sender][_articleID] = true;
+    articleToLikes[_articleID]++;
+    emit ArticleLiked(_articleID, msg.sender, block.timestamp);
   }
 
-  function commentOnPost(uint256 _postID, string memory _text) public {
-    _requirePostExists(_postID);
+  function unlikeArticle(
+    uint256 _articleID
+  ) public {
+    _requireArticleExists(_articleID);
+    require(
+      userToArticleLikes[msg.sender][_articleID],
+      "You have not liked this article yet"
+    );
+    userToArticleLikes[msg.sender][_articleID] = false;
+    articleToLikes[_articleID]--;
+    emit ArticleUnliked(_articleID, msg.sender, block.timestamp);
+  }
+
+  function commentOnArticle(uint256 _articleID, string memory _text) public {
+    _requireArticleExists(_articleID);
     // set max length at 250 characters
     require(
       bytes(_text).length <= 250, "Comment must be less than 250 characters"
     );
-    uint256 commentIndex = postToComments[_postID].length;
-    postToComments[_postID].push(Comment(msg.sender, _text, commentIndex));
-    emit PostCommented(
-      _postID, msg.sender, _text, commentIndex, block.timestamp
+    uint256 commentIndex = articleToComments[_articleID].length;
+    articleToComments[_articleID].push(Comment(msg.sender, _text, commentIndex));
+    emit ArticleCommented(
+      _articleID, msg.sender, _text, commentIndex, block.timestamp
     );
   }
 
-  function deleteComment(uint256 _postID, uint256 _commentID) public {
-    _requirePostExists(_postID);
+  function deleteComment(uint256 _articleID, uint256 _commentID) public {
+    _requireArticleExists(_articleID);
     require(
-      postCommentToUser[_postID][_commentID] == msg.sender,
-      "You can't erase what you didn't post!"
+      articleCommentToUser[_articleID][_commentID] == msg.sender,
+      "You can't erase what you didn't article!"
     );
-    delete postCommentToUser[_postID][_commentID];
-    delete postToComments[_postID][_commentID];
-    emit PostCommentDeleted(_postID, msg.sender, block.timestamp);
+    delete articleCommentToUser[_articleID][_commentID];
+    delete articleToComments[_articleID][_commentID];
+    emit ArticleCommentDeleted(_articleID, msg.sender, block.timestamp);
   }
 
-  function sharePost(
-    uint256 _postID
+  function shareArticle(
+    uint256 _articleID
   ) public {
-    _requirePostExists(_postID);
-    userToSharedArticles[msg.sender].push(_postID);
-    // userToSharedPostIndex[msg.sender][_postID] =
-    //   userToSharedArticles[msg.sender].length - 1;
-    emit PostShared(_postID, msg.sender, block.timestamp);
+    _requireArticleExists(_articleID);
+    userToBookmarkedArticles[msg.sender].push(_articleID);
+    // userToBookmarkedArticleIndex[msg.sender][_articleID] =
+    //   userToBookmarkedArticles[msg.sender].length - 1;
+    emit ArticleBookmarked(_articleID, msg.sender, block.timestamp);
   }
 
-  function deleteSharedPost(
-    uint256 _postID
+  function deleteBookmarkedArticle(
+    uint256 _articleID
   ) public {
-    _requirePostExists(_postID);
+    _requireArticleExists(_articleID);
 
-    // Retrieve the index of the post to be deleted
-    uint256 index = userToSharedPostIndex[msg.sender][_postID];
+    // Retrieve the index of the article to be deleted
+    uint256 index = userToBookmarkedArticleIndex[msg.sender][_articleID];
 
-    // Set the post to a default value (e.g., 0)
-    userToSharedArticles[msg.sender][index] = 0;
+    // Set the article to a default value (e.g., 0)
+    userToBookmarkedArticles[msg.sender][index] = 0;
 
-    // Delete the index entry for the deleted post
-    delete userToSharedPostIndex[msg.sender][_postID];
+    // Delete the index entry for the deleted article
+    delete userToBookmarkedArticleIndex[msg.sender][_articleID];
 
-    // Emit the PostUnshared event
-    emit PostUnshared(_postID, msg.sender, block.timestamp);
+    // Emit the ArticleUnshared event
+    emit ArticleUnshared(_articleID, msg.sender, block.timestamp);
   }
 
   function followUser(
@@ -238,9 +243,9 @@ contract BasedShop {
                             VIEW FUNCTIONS
   //////////////////////////////////////////////////////////////*/
 
-  function _requirePostExists(
-    uint256 _postID
+  function _requireArticleExists(
+    uint256 _articleID
   ) internal view {
-    require(basedArticles.tokenId() >= _postID, "Post does not exist");
+    require(basedArticles.tokenId() >= _articleID, "Article does not exist");
   }
 }

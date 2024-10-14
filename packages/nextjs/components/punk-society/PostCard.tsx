@@ -25,7 +25,7 @@ export interface Post extends Partial<NFTMetaData> {
   date?: string;
 }
 
-export const PostCard = ({ post, isGrid }: { post: Post; isGrid: boolean }) => {
+export const PostCard = ({ post }: { post: Post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
 
@@ -63,11 +63,17 @@ export const PostCard = ({ post, isGrid }: { post: Post; isGrid: boolean }) => {
     }
   };
 
+  const formatDate = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000); // Convert to milliseconds
+    return date.toLocaleDateString(); // Format the date as needed
+  };
+
   return (
     <div className="flex justify-center items-center">
-      <div className={`card-compact bg-base-300 ${isGrid ? "w-[300px]" : "w-[100%]"} relative group rounded-lg`}>
-        <div className="flex space-x-3 p-3 items-center">
+      <div className={`card-compact bg-base-300 w-[100%] relative group rounded-lg`}>
+        <div className="flex space-x-3 p-3 items-center justify-between">
           <ProfileAddress address={post.user} />
+          <p className="my-0 text-sm">{post.date ? formatDate(Number(post.date)) : "No date available"}</p>
         </div>
         {/* Image Section */}
         {post.image && post.image !== "https://ipfs.io/ipfs/" && (

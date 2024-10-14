@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LoadingBars } from "../../components/punk-society/LoadingBars";
-// import { AddressInput } from "~~/components/scaffold-eth";
+import { AddressInput } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 export const Search = () => {
@@ -46,16 +46,13 @@ export const Search = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen  gap-3">
-      <input
-        type="text"
+    <div className="flex flex-col items-center justify-center min-h-screen gap-3">
+      <AddressInput
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value.toLowerCase())}
-        placeholder="Enter username or address"
-        className="input input-bordered w-full max-w-xs"
+        onChange={value => setSearchQuery(value.toLowerCase())}
+        placeholder="username, ENS or address"
       />
-      {/* <AddressInput value={searchQuery} onChange={setSearchQuery} placeholder="Enter username or ENS" /> */}
-      <button onClick={handleSearch} disabled={loading} className="btn btn-primary">
+      <button onClick={handleSearch} disabled={loading} className="btn btn-primary px-6">
         {loading ? <LoadingBars /> : "Go"}
       </button>
       {error && <p className="text-red-500 mt-2">{error}</p>}

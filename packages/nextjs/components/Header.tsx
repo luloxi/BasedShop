@@ -125,7 +125,7 @@ export const Header = () => {
                   pathname === "/shoppingcart" ? "text-blue-600" : ""
                 }`}
               >
-                <ShoppingCartIcon className="h-6 w-6" />
+                <ShoppingCartIcon className="h-5 w-5" />
               </button>
             </Link>
           </div>

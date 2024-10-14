@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ErrorComponent } from "../../../components/punk-society/ErrorComponent";
 import { LoadingBars } from "../../../components/punk-society/LoadingBars";
 import { NewsFeed } from "../../../components/punk-society/NewsFeed";
+import ProfileInfo from "../_components/ProfileInfo";
 import ProfilePictureUpload from "../_components/ProfilePictureUpload";
 import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import { NextPage } from "next";
@@ -27,29 +28,11 @@ export interface Post extends Partial<NFTMetaData> {
 const defaultProfilePicture = "/guest-profile.jpg";
 
 const ProfilePage: NextPage = () => {
-  const [username, setUsername] = useState("");
-  const [bio, setBio] = useState("");
-  const [profilePicture, setProfilePicture] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [isEditing, setIsEditing] = useState(false); // New state for edit mode
   const [articles, setArticles] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
   const [page, setPage] = useState(1); // Start from page 1 to get the last post first
-  const [loadingProfile, setLoadingProfile] = useState(true);
   const [activeTab, setActiveTab] = useState("Listed");
-
-  const projectId = process.env.NEXT_PUBLIC_CDP_PROJECT_ID ? process.env.NEXT_PUBLIC_CDP_PROJECT_ID : "";
-  const { address: connectedAddress } = useAccount();
-
-  const onrampBuyUrl = getOnrampBuyUrl({
-    projectId,
-    addresses: connectedAddress ? { [connectedAddress]: ["base"] } : {},
-    // assets: ["ETH", "USDC"],
-    assets: ["ETH"],
-    // presetFiatAmount: 20,
-    // fiatCurrency: "USD",
-  });
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
@@ -59,15 +42,6 @@ const ProfilePage: NextPage = () => {
 
   const pathname = usePathname();
   const address = pathname.split("/").pop();
-
-  const { data: punkProfile } = useScaffoldReadContract({
-    contractName: "BasedProfile",
-    functionName: "profiles",
-    args: [address],
-    watch: true,
-  });
-
-  const { writeContractAsync: punkProfileWriteAsync } = useScaffoldWriteContract("BasedProfile");
 
   const {
     data: createEvents,
@@ -79,29 +53,6 @@ const ProfilePage: NextPage = () => {
     fromBlock: 0n,
     watch: true,
   });
-
-  const handleEditProfile = async () => {
-    try {
-      // Check if the current profile picture is the default one
-      if (profilePicture === defaultProfilePicture) {
-        // Unset the current profile picture before editing the profile
-        setProfilePicture("");
-      }
-
-      await punkProfileWriteAsync({
-        functionName: "setProfile",
-        args: [username, bio, profilePicture, email],
-      });
-
-      notification.success("Profile Edited Successfully");
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error during editing profile:", error);
-
-      // Log the error and notify the user
-      notification.error("Editing profile, please try again.");
-    }
-  };
 
   const fetchArticles = useCallback(
     async (page: number) => {
@@ -121,6 +72,7 @@ const ProfilePage: NextPage = () => {
             const { args } = event;
             const user = args?.user;
             const tokenURI = args?.tokenURI;
+            const date = args?.timestamp;
 
             if (args?.user !== address) continue;
             if (!tokenURI) continue;
@@ -139,6 +91,7 @@ const ProfilePage: NextPage = () => {
               listingId: undefined,
               uri: tokenURI,
               user: user || "",
+              date: date?.toString() || "",
               ...nftMetadata,
             });
           } catch (e) {
@@ -176,22 +129,9 @@ const ProfilePage: NextPage = () => {
     [loadingMore],
   );
 
-  useEffect(() => {
-    if (!isEditing && punkProfile) {
-      setUsername(punkProfile[0] || "");
-      setBio(punkProfile[1] || "");
-      setProfilePicture(punkProfile[2] ? punkProfile[2] : defaultProfilePicture);
-      setLoadingProfile(false);
-    }
-  }, [punkProfile, isEditing]);
-
   // Ensure the address is available before rendering the component
   if (!address) {
     return <p>Inexistent address, try again...</p>;
-  }
-
-  if (loading && page === 1) {
-    return <LoadingBars />;
   }
 
   if (createErrorReadingEvents) {
@@ -200,96 +140,7 @@ const ProfilePage: NextPage = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center">
-        {/* User Profile Section */}
-        {loadingProfile ? (
-          <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full m-2">
-            <div className="flex items-center justify-center w-full h-full">
-              <LoadingBars />
-            </div>
-          </div>
-        ) : (
-          <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full m-2">
-            {/* Profile Picture */}
-            <div className="avatar ">
-              <ProfilePictureUpload
-                isEditing={isEditing}
-                profilePicture={profilePicture}
-                setProfilePicture={setProfilePicture}
-              />
-            </div>
-            {/* User Info Section */}
-            <div className="flex flex-col justify-center items-center">
-              {isEditing ? (
-                <InputBase placeholder="Your Name" value={username} onChange={setUsername} />
-              ) : (
-                <>
-                  <h2 className="text-2xl font-bold">{username || "Guest user"}</h2>
-
-                  {bio && <p className="text-base-content">{bio}</p>}
-
-                  <div className="mt-2">
-                    {address == connectedAddress ? (
-                      <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-                        <div>
-                          <RainbowKitCustomConnectButton />
-                        </div>
-                        <div className="bg-base-200 rounded-lg">
-                          <FundButton fundingUrl={onrampBuyUrl} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="text-base-content">
-                        <Address address={address} />
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-            {/* Div to align info in the center */}
-            <div></div>
-            {/* User Bio */}{" "}
-            {isEditing ? (
-              <div className="flex-grow text-center md:mx-auto mt-4 md:mt-0">
-                <>
-                  <InputBase placeholder="Your Bio" value={bio} onChange={setBio} />
-                  <InputBase placeholder="Your Email" value={email} onChange={setEmail} />
-                </>
-              </div>
-            ) : (
-              <></>
-            )}
-            {/* Edit/Cancel Button */}
-            {address === connectedAddress && (
-              <>
-                {isEditing ? (
-                  <button
-                    className="absolute top-4 right-4 btn btn-secondary btn-sm"
-                    onClick={() => setIsEditing(false)}
-                  >
-                    X Cancel
-                  </button>
-                ) : (
-                  <button className="absolute top-4 right-4 btn btn-primary btn-sm" onClick={() => setIsEditing(true)}>
-                    <PencilIcon className="h-5 w-5" />
-                    Edit
-                  </button>
-                )}
-                {isEditing && (
-                  <div className="mt-2 flex items-center gap-2">
-                    <button className="cool-button" onClick={handleEditProfile}>
-                      Save changes
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        )}
-      </div>
-      {/* {loading && <LoadingBars />} */}
-
+      <ProfileInfo address={address} />
       <div className="flex flex-col items-center justify-center">
         <div className="tabs-bar ">
           <button className={`tab  ${activeTab === "Listed" ? "active" : ""}`} onClick={() => handleTabClick("Listed")}>
@@ -314,9 +165,15 @@ const ProfilePage: NextPage = () => {
             Revenue
           </button>
         </div>
-        <NewsFeed articles={articles} />
+        {loading && page === 1 ? (
+          <LoadingBars />
+        ) : articles.length === 0 ? (
+          <p>This user has no articles</p>
+        ) : (
+          <NewsFeed articles={articles} />
+        )}
         <div ref={lastPostElementRef}></div>
-        {loadingMore && <LoadingBars />}
+        {page !== 1 && loadingMore && <LoadingBars />}
       </div>
     </>
   );

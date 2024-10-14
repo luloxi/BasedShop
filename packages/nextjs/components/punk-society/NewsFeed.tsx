@@ -4,10 +4,11 @@ import { PostCard } from "./PostCard";
 
 type NewsFeedProps = {
   articles: Post[];
-  isGrid?: boolean; // Optional prop to control grid layout
 };
 
-export const NewsFeed: React.FC<NewsFeedProps> = ({ articles, isGrid = false }) => {
+export const NewsFeed: React.FC<NewsFeedProps> = ({ articles }) => {
+  const isGrid = false;
+
   return (
     <div className="mt-4 md:flex md:justify-center md:items-center md:px-6 md:border-x-2 dark:border-white border-black">
       <div
@@ -18,7 +19,7 @@ export const NewsFeed: React.FC<NewsFeedProps> = ({ articles, isGrid = false }) 
         }`}
       >
         {articles.map(post => (
-          <PostCard post={post} key={post.uri} isGrid={isGrid} />
+          <PostCard post={post} key={post.uri} />
         ))}
       </div>
     </div>
