@@ -37,7 +37,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ postId }) => {
     }
 
     setBookmarkedPost(true); // Optimistically update the state
-    setBookmarkCount(prevCount => prevCount + 1); // Optimistically update the like count
+    setBookmarkCount(prevCount => prevCount + 1); // Optimistically update the bookmark count
 
     try {
       await writeContractAsync({
@@ -47,14 +47,14 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ postId }) => {
       notification.success("Bookmarked successfully!");
     } catch (error) {
       setBookmarkedPost(false); // Revert the optimistic update if the transaction fails
-      setBookmarkCount(prevCount => prevCount - 1); // Revert the like count
+      setBookmarkCount(prevCount => prevCount - 1); // Revert the bookmark count
       notification.error("Bookmarking failed, please try again.");
     }
   };
 
   const handleRemoveBookmark = async () => {
     setBookmarkedPost(false); // Optimistically update the state
-    setBookmarkCount(prevCount => prevCount - 1); // Optimistically update the like count
+    setBookmarkCount(prevCount => prevCount - 1); // Optimistically update the bookmark count
 
     try {
       await writeContractAsync({
@@ -66,7 +66,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ postId }) => {
       console.error("Error during removing bookmark:", error);
       notification.error("Removing bookmark failed, please try again.");
       setBookmarkedPost(true); // Revert the state if the transaction fails
-      setBookmarkCount(prevCount => prevCount + 1); // Revert the like count
+      setBookmarkCount(prevCount => prevCount + 1); // Revert the bookmark count
     }
   };
 
@@ -83,7 +83,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ postId }) => {
   }, [postBookmarks]);
 
   return (
-    <div className="like-button-container">
+    <div className="bookmark-button-container">
       {bookmarkedPost ? (
         <button className="icon-button" onClick={handleRemoveBookmark}>
           <SolidBookmarkIcon className="text-orange-500 bookmark-icon" />
@@ -94,19 +94,19 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ postId }) => {
         </button>
       )}
 
-      <span className="like-counter">{bookmarkCount}</span>
+      <span className="bookmark-counter">{bookmarkCount}</span>
       <style jsx>{`
-        .like-button-container {
+        .bookmark-button-container {
           display: flex;
           align-items: center;
         }
-        .like-button {
+        .bookmark-button {
           font-size: 24px; /* Adjust the size of the heart icon */
           border: none;
           background: none;
           cursor: pointer;
         }
-        .like-counter {
+        .bookmark-counter {
           margin-left: 8px;
           font-size: 16px;
         }

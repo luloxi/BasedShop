@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import BookmarkButton from "./BookmarkButton";
-import CommentSection from "./CommentSection";
+// import CommentSection from "./CommentSection";
 // import LikeButton from "./LikedButton";
 // import { ProfileAddress } from "./ProfileAddress";
 import {
@@ -30,7 +30,7 @@ export interface Post extends Partial<NFTMetaData> {
 
 export const PostCard = ({ post }: { post: Post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showCommentSection, setShowCommentSection] = useState(false);
+  // const [showCommentSection, setShowCommentSection] = useState(false);
 
   const { data: profileInfo } = useScaffoldReadContract({
     contractName: "BasedProfile",
@@ -156,7 +156,7 @@ export const PostCard = ({ post }: { post: Post }) => {
               </button>
             </div>
           </div>
-          {showCommentSection && <CommentSection postId={BigInt(post.postId || 0)} />}
+          {/* {showCommentSection && <CommentSection postId={BigInt(post.postId || 0)} />} */}
         </div>
 
         {/* Modal for fullscreen image */}

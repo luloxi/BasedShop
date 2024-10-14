@@ -53,7 +53,7 @@ const Create = ({ onClose }: { onClose: any }) => {
     };
 
     generateTokenURIString();
-  }, [description, uploadedImageIpfsPath]);
+  }, [name, externalUrl, description, uploadedImageIpfsPath]);
 
   return (
     <>
