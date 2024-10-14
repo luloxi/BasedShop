@@ -71,7 +71,7 @@ export const MintingButtons: React.FC<MintingFormProps> = ({ yourJSON, resetForm
     <div className="flex flex-col justify-center items-center mt-6 gap-3">
       <div className="flex items-center">
         <button className="cool-button" disabled={loading} onClick={handleCreatePost}>
-          Create Post
+          Publish article
         </button>
       </div>
     </div>

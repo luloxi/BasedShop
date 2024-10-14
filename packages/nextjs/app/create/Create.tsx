@@ -41,7 +41,7 @@ const Create = ({ onClose }: { onClose: any }) => {
         {/* <div className="flex  flex-col md:flex-row items-start flex-grow"> */}
         <div className="w-full px-10 bg-base-100 rounded-lg py-4 ">
           <div className="flex flex-row justify-between items-center mb-4">
-            <h3 className="text-2xl font-bold ">Create a new post</h3>
+            <h3 className="text-2xl font-bold ">Enter article details</h3>
           </div>
 
           {/* Metadata and Attributes Forms */}

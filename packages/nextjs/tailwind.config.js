@@ -13,7 +13,7 @@ module.exports = {
           "primary-content": "#000000", // Darker contrast for text
           secondary: "#A0C4E0", // More visible light blue for secondary
           "secondary-content": "#000000", // Darker contrast for text
-          accent: "#E0F0FF", // More visible light blue for accent
+          accent: "#000000", // More visible light blue for accent
           "accent-content": "#000000", // Darker contrast for accent content
           neutral: "#F0F8FF", // Light blue for neutral background
           "neutral-content": "#000000", // Darker contrast for text
@@ -46,7 +46,7 @@ module.exports = {
           "primary-content": "#F9FBFF",
           secondary: "#001a33", // Darker blue
           "secondary-content": "#F9FBFF",
-          accent: "#001122", // Even darker blue
+          accent: "#FFFFFF", // Even darker blue
           "accent-content": "#F9FBFF",
           neutral: "#F9FBFF",
           "neutral-content": "#001122", // Dark blue
