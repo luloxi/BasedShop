@@ -30,6 +30,7 @@ const ProfilePage: NextPage = () => {
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [profilePicture, setProfilePicture] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false); // New state for edit mode
   const [articles, setArticles] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +90,7 @@ const ProfilePage: NextPage = () => {
 
       await punkProfileWriteAsync({
         functionName: "setProfile",
-        args: [username, bio, profilePicture],
+        args: [username, bio, profilePicture, email],
       });
 
       notification.success("Profile Edited Successfully");
@@ -253,6 +254,7 @@ const ProfilePage: NextPage = () => {
               <div className="flex-grow text-center md:mx-auto mt-4 md:mt-0">
                 <>
                   <InputBase placeholder="Your Bio" value={bio} onChange={setBio} />
+                  <InputBase placeholder="Your Email" value={email} onChange={setEmail} />
                 </>
               </div>
             ) : (
