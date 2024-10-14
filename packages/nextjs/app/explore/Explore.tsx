@@ -21,7 +21,7 @@ export const Explore = () => {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(0);
-  const [activeTab, setActiveTab] = useState("Global");
+  const [activeTab, setActiveTab] = useState("All");
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
@@ -115,20 +115,14 @@ export const Explore = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="tabs-bar ">
-        <button className={`tab ${activeTab === "Global" ? "active" : ""}`} onClick={() => handleTabClick("Global")}>
-          Global
+        <button className={`tab ${activeTab === "All" ? "active" : ""}`} onClick={() => handleTabClick("All")}>
+          All
         </button>
         <button
           className={`tab text-red-600 ${activeTab === "Following" ? "active" : ""}`}
           onClick={() => handleTabClick("Following")}
         >
           Following
-        </button>
-        <button
-          className={`tab text-red-600 ${activeTab === "Groups" ? "active" : ""}`}
-          onClick={() => handleTabClick("Groups")}
-        >
-          Groups
         </button>
       </div>
       <NewsFeed articles={articles} isGrid={false} />

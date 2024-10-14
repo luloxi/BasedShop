@@ -36,7 +36,7 @@ const ProfilePage: NextPage = () => {
   const [loadingMore, setLoadingMore] = useState(true);
   const [page, setPage] = useState(1); // Start from page 1 to get the last post first
   const [loadingProfile, setLoadingProfile] = useState(true);
-  const [activeTab, setActiveTab] = useState("Minted");
+  const [activeTab, setActiveTab] = useState("Listed");
 
   const projectId = process.env.NEXT_PUBLIC_CDP_PROJECT_ID ? process.env.NEXT_PUBLIC_CDP_PROJECT_ID : "";
   const { address: connectedAddress } = useAccount();
@@ -290,20 +290,20 @@ const ProfilePage: NextPage = () => {
 
       <div className="flex flex-col items-center justify-center">
         <div className="tabs-bar ">
-          <button
-            className={`tab text-red-600 ${activeTab === "Featured" ? "active" : ""}`}
-            onClick={() => handleTabClick("Featured")}
-          >
-            Featured
-          </button>
-          <button className={`tab ${activeTab === "Minted" ? "active" : ""}`} onClick={() => handleTabClick("Minted")}>
-            Minted
+          <button className={`tab  ${activeTab === "Listed" ? "active" : ""}`} onClick={() => handleTabClick("Listed")}>
+            Listed
           </button>
           <button
-            className={`tab text-red-600 ${activeTab === "Shared" ? "active" : ""}`}
-            onClick={() => handleTabClick("Shared")}
+            className={`tab text-red-600 ${activeTab === "Bought" ? "active" : ""}`}
+            onClick={() => handleTabClick("Bought")}
           >
-            Shared
+            Bought
+          </button>
+          <button
+            className={`tab text-red-600 ${activeTab === "Activity" ? "active" : ""}`}
+            onClick={() => handleTabClick("Activity")}
+          >
+            Activity
           </button>
           <button
             className={`tab text-red-600 ${activeTab === "Revenue" ? "active" : ""}`}

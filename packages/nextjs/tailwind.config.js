@@ -9,22 +9,22 @@ module.exports = {
     themes: [
       {
         light: {
-          primary: "#FFB07A", // Slightly lighter orange for primary
-          "primary-content": "#A0522D", // Slightly lighter contrast for text
-          secondary: "#CD853F", // Slightly lighter orange for secondary
-          "secondary-content": "#A0522D", // Slightly lighter tone for contrast
-          accent: "#FFD1A3", // Slightly lighter orange for accent
-          "accent-content": "#CD853F", // Slightly lighter brown for accent content
-          neutral: "#FFEBCD", // Slightly lighter neutral orange background
-          "neutral-content": "#A0522D", // Slightly lighter text color
-          "base-100": "#FFB84C", // Darker brown for base background
-          "base-200": "#F5DEB3", // Lighter brown for sections
-          "base-300": "#DEB887", // Darker brown for borders/secondary base
-          "base-content": "#8B4513", // Darker content color for base
-          info: "#CD853F", // Darker brown for info messages
-          success: "#3CB371", // Slightly lighter green for success
-          warning: "#D2691E", // Darker brown for warnings
-          error: "#A52A2A", // Darker red for errors
+          primary: "#CCE4F6", // More visible light blue for primary
+          "primary-content": "#000000", // Darker contrast for text
+          secondary: "#A0C4E0", // More visible light blue for secondary
+          "secondary-content": "#000000", // Darker contrast for text
+          accent: "#E0F0FF", // More visible light blue for accent
+          "accent-content": "#000000", // Darker contrast for accent content
+          neutral: "#F0F8FF", // Light blue for neutral background
+          "neutral-content": "#000000", // Darker contrast for text
+          "base-100": "#CCE4F6", // Light blue for base background
+          "base-200": "#E0F0FF", // Slightly darker light blue for sections
+          "base-300": "#A0C4E0", // Slightly darker light blue for borders/secondary base
+          "base-content": "#000000", // Darker contrast for base content
+          info: "#A0C4E0", // Light blue for info messages
+          success: "#32CD32", // Bright green for success
+          warning: "#FFD700", // Bright yellow for warnings
+          error: "#FF6347", // Bright red for errors
 
           "--rounded-btn": "9999rem", // Keep the button rounded
 
