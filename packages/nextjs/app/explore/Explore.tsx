@@ -35,7 +35,7 @@ export const Explore = () => {
     // error: createErrorReadingEvents,
   } = useScaffoldEventHistory({
     contractName: "BasedShop",
-    eventName: "PostCreated",
+    eventName: "ArticleCreated",
     fromBlock: 0n,
     watch: true,
   });
@@ -57,7 +57,7 @@ export const Explore = () => {
           try {
             const user = event.args?.user;
             const tokenURI = event.args?.tokenURI;
-            const date = event.args?.timestamp;
+            const date = event.args?.date;
 
             if (!tokenURI) continue;
 
@@ -65,7 +65,7 @@ export const Explore = () => {
             const nftMetadata: NFTMetaData = await getMetadataFromIPFS(ipfsHash);
 
             articlesUpdate.push({
-              postId: parseInt(event.args?.postId?.toString() ?? "0"),
+              postId: parseInt(event.args?.articleId?.toString() ?? "0"),
               uri: tokenURI,
               user: user || "",
               date: date?.toString() || "",

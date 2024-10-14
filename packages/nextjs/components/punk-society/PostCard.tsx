@@ -2,18 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import BookmarkButton from "./BookmarkButton";
 import CommentSection from "./CommentSection";
-import LikeButton from "./LikedButton";
-import { ProfileAddress } from "./ProfileAddress";
+// import LikeButton from "./LikedButton";
+// import { ProfileAddress } from "./ProfileAddress";
 import {
-  BookmarkIcon,
-  ChatBubbleLeftIcon,
+  // BookmarkIcon,
+  // ChatBubbleLeftIcon,
   MagnifyingGlassPlusIcon,
   ShareIcon,
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { ChatBubbleLeftIcon as ChatBubbleLeftSolidIcon } from "@heroicons/react/24/solid";
+// import { ChatBubbleLeftIcon as ChatBubbleLeftSolidIcon } from "@heroicons/react/24/solid";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
@@ -29,6 +32,17 @@ export const PostCard = ({ post }: { post: Post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCommentSection, setShowCommentSection] = useState(false);
 
+  const { data: profileInfo } = useScaffoldReadContract({
+    contractName: "BasedProfile",
+    functionName: "profiles",
+    args: [post.user],
+    watch: true,
+  });
+
+  const defaultProfilePicture = "/guest-profile.jpg";
+
+  const profilePicture = profileInfo && profileInfo[2] ? profileInfo[2] : defaultProfilePicture;
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -37,9 +51,9 @@ export const PostCard = ({ post }: { post: Post }) => {
     setIsModalOpen(false);
   };
 
-  const toggleCommentSection = () => {
-    setShowCommentSection(!showCommentSection);
-  };
+  // const toggleCommentSection = () => {
+  //   setShowCommentSection(!showCommentSection);
+  // };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -71,40 +85,61 @@ export const PostCard = ({ post }: { post: Post }) => {
   return (
     <div className="flex justify-center items-center">
       <div className={`card-compact bg-base-300 w-[100%] relative group rounded-lg`}>
-        <div className="flex space-x-3 p-3 items-center justify-between">
-          <ProfileAddress address={post.user} />
-          <p className="my-0 text-sm">{post.date ? formatDate(Number(post.date)) : "No date available"}</p>
-        </div>
-        {/* Image Section */}
-        {post.image && post.image !== "https://ipfs.io/ipfs/" && (
-          <div className="relative w-full h-0 pb-[100%] overflow-hidden">
-            <figure className="absolute inset-0">
-              <Image
-                src={post.image || "/path/to/default/image.png"}
-                alt="NFT Image"
-                className="w-full h-full rounded-lg object-cover"
-                // fill // Ensures the image fills the container
-                width={800} // Adjust this to the desired fullscreen width
-                height={800} // Adjust this to maintain the aspect ratio of the image
-              />
-              <button
-                className="absolute bottom-2 right-2 bg-base-200 p-2 rounded-full shadow-lg"
-                onClick={handleOpenModal}
-              >
-                <MagnifyingGlassPlusIcon className="inline-block h-7 w-7" />
-              </button>
-            </figure>
+        <div className="flex  p-3 items-center justify-between">
+          <h2 className="text-xl font-bold">{post.name}</h2>
+          <div className="flex flex-row justify-center items-center gap-3">
+            <p className="my-0 text-sm">{post.date ? formatDate(Number(post.date)) : "No date available"}</p>
+            <Link href={`/profile/${post.user}`} passHref>
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+                style={{
+                  backgroundImage: `url(${profilePicture})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              ></div>
+            </Link>
           </div>
-        )}
-
-        <div className="card-body space-y-3">
-          <div className="flex flex-col justify-center mt-1">
+        </div>
+        <div className="flex flex-row items-center mx-2">
+          {/* Image Section */}
+          {post.image && post.image !== "https://ipfs.io/ipfs/" && (
+            <div className="relative w-1/3 h-auto overflow-hidden">
+              <figure className="relative w-full h-full">
+                <Image
+                  src={post.image || "/path/to/default/image.png"}
+                  alt="NFT Image"
+                  className="w-full h-auto rounded-lg object-cover"
+                  layout="responsive"
+                  width={800} // Adjust this to the desired fullscreen width
+                  height={800} // Adjust this to maintain the aspect ratio of the image
+                />
+                <button
+                  className="absolute bottom-2 right-2 bg-base-200 p-2 rounded-full shadow-lg"
+                  onClick={handleOpenModal}
+                >
+                  <MagnifyingGlassPlusIcon className="inline-block h-7 w-7" />
+                </button>
+              </figure>
+            </div>
+          )}
+          <div className="flex flex-col justify-center w-2/3 pl-4">
             <p className="my-0 text-lg">{post.description ?? "No description available."}</p>
           </div>
+        </div>
 
+        <div className="card-body space-y-3">
           <div className="flex items-center justify-between gap-3">
             {/* Your component JSX here */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-row justify-center items-center gap-3">
+              {" "}
+              <button onClick={handleShare} className="icon-button">
+                <ShareIcon className="repost-icon " />
+              </button>
+              <BookmarkButton postId={BigInt(post.postId || 0)} />
+            </div>
+
+            {/* <div className="flex items-center gap-3">
               <LikeButton postId={BigInt(post.postId || 0)} />
               <button onClick={toggleCommentSection} className="icon-button">
                 {showCommentSection ? (
@@ -113,15 +148,8 @@ export const PostCard = ({ post }: { post: Post }) => {
                   <ChatBubbleLeftIcon className="comment-icon" />
                 )}
               </button>
-              <button onClick={handleShare} className="icon-button">
-                <ShareIcon className="repost-icon " />
-              </button>
-            </div>
+            </div> */}
             <div className="flex items-center gap-3">
-              <button className="p-2 rounded-full bg-red-600 text-white">
-                <BookmarkIcon className="h-5 w-5" />
-              </button>
-
               <button className="px-4 py-2 rounded-lg bg-red-600 text-white">Buy</button>
               <button className="p-2 rounded-full bg-red-600 text-white">
                 <ShoppingCartIcon className="h-5 w-5" />

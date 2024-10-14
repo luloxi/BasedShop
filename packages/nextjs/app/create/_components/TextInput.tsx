@@ -47,7 +47,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         {prefix}
         <textarea
           className="textarea text-lg textarea-ghost border-base-300 focus:border-green-600 border-2 rounded-lg focus:outline-none focus:bg-transparent focus:text-gray-400 h-auto min-h-[3rem] px-4 w-full font-medium placeholder:text-accent/50 text-green-500 resize-none"
-          placeholder="Text for your post"
+          placeholder="Describe your article"
           name="description"
           value={description}
           onChange={handleChange}

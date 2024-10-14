@@ -21,7 +21,23 @@ contract BasedShop {
     uint256 indexed articleId,
     address indexed user,
     string tokenURI,
+    uint256 date,
+    uint256 price,
+    uint256 amount
+  );
+  event ArticleBought(
+    uint256 indexed articleId,
+    address indexed buyer,
+    address indexed seller,
+    uint256 price,
     uint256 date
+  );
+  event ArticlePriceUpdated(
+    uint256 indexed articleId, uint256 oldPrice, uint256 newPrice
+  );
+
+  event ArticleAmountUpdated(
+    uint256 indexed articleId, uint256 oldAmount, uint256 newAmount
   );
   event ArticleDeleted(uint256 indexed articleId, uint256 date);
   event ArticleLiked(
@@ -43,7 +59,7 @@ contract BasedShop {
   event ArticleBookmarked(
     uint256 indexed articleID, address indexed user, uint256 date
   );
-  event ArticleUnshared(
+  event RemoveBookmark(
     uint256 indexed articleID, address indexed user, uint256 date
   );
   event UserFollowed(
@@ -67,6 +83,11 @@ contract BasedShop {
   mapping(uint256 => address) public articleIdToUser;
   mapping(address => uint256[]) public userArticles;
 
+  // Article details
+  mapping(uint256 => uint256) public articlePrices;
+  mapping(uint256 => uint256) public articleAmounts;
+  mapping(uint256 => mapping(address => bool)) public articleBuyers;
+
   // Likes
   mapping(uint256 article => uint256 likes) public articleToLikes;
   mapping(address user => mapping(uint256 article => bool liked)) public
@@ -78,7 +99,10 @@ contract BasedShop {
     public articleCommentToUser;
 
   // Bookmarked
-  mapping(address user => uint256[] sharedArticles) public
+  mapping(address user => mapping(uint256 article => bool)) public
+    userToArticleBookmark;
+  mapping(uint256 article => uint256 bookmarks) public articleToBookmarks;
+  mapping(address user => uint256[] bookmarkedArticles) public
     userToBookmarkedArticles;
   mapping(address user => mapping(uint256 article => uint256 index)) public
     userToBookmarkedArticleIndex;
@@ -103,15 +127,67 @@ contract BasedShop {
    //////////////////////////////////////////////////////////////*/
 
   function createArticle(
-    string memory _tokenURI
+    string memory _tokenURI,
+    uint256 _price,
+    uint256 _amount
   ) public {
     uint256 articleId = articleIds++;
     articleIdToUser[articleId] = msg.sender;
     userArticles[msg.sender].push(articleId);
 
+    articlePrices[articleId] = _price;
+    articleAmounts[articleId] = _amount;
+
     basedArticles.mint(_tokenURI);
 
-    emit ArticleCreated(articleId, msg.sender, _tokenURI, block.timestamp);
+    emit ArticleCreated(
+      articleId, msg.sender, _tokenURI, block.timestamp, _price, _amount
+    );
+  }
+
+  function buyArticle(
+    uint256 _articleId
+  ) public payable {
+    require(articleAmounts[_articleId] > 0, "Article is sold out");
+    uint256 price = articlePrices[_articleId];
+    require(msg.value >= price, "Not enough ETH sent");
+
+    address seller = articleIdToUser[_articleId];
+    require(seller != address(0), "Invalid seller address");
+
+    // Transfer the ETH to the seller
+    (bool success,) = seller.call{ value: msg.value }("");
+    require(success, "Transfer failed");
+
+    // Decrease the amount of the article by one
+    articleAmounts[_articleId]--;
+
+    // Record the buyer
+    articleBuyers[_articleId][msg.sender] = true;
+
+    emit ArticleBought(_articleId, msg.sender, seller, price, block.timestamp);
+  }
+
+  function updateArticlePrice(uint256 _articleId, uint256 _newPrice) public {
+    require(
+      articleIdToUser[_articleId] == msg.sender, "Not the owner of the article"
+    );
+
+    uint256 oldPrice = articlePrices[_articleId];
+    articlePrices[_articleId] = _newPrice;
+
+    emit ArticlePriceUpdated(_articleId, oldPrice, _newPrice);
+  }
+
+  function updateArticleAmount(uint256 _articleId, uint256 _newAmount) public {
+    require(
+      articleIdToUser[_articleId] == msg.sender, "Not the owner of the article"
+    );
+
+    uint256 oldAmount = articleAmounts[_articleId];
+    articleAmounts[_articleId] = _newAmount;
+
+    emit ArticleAmountUpdated(_articleId, oldAmount, _newAmount);
   }
 
   function deleteArticle(
@@ -123,85 +199,118 @@ contract BasedShop {
 
     basedArticles.burn(_articleId);
 
+    // Remove the price and amount data
+    delete articlePrices[_articleId];
+    delete articleAmounts[_articleId];
+
+    // Remove the articleId to user mapping
+    delete articleIdToUser[_articleId];
+
     emit ArticleDeleted(_articleId, block.timestamp);
   }
 
   function likeArticle(
-    uint256 _articleID
+    uint256 _articleId
   ) public {
-    _requireArticleExists(_articleID);
     require(
-      !userToArticleLikes[msg.sender][_articleID],
+      articleBuyers[_articleId][msg.sender],
+      "You must buy the article to like it"
+    );
+    _requireArticleExists(_articleId);
+    require(
+      !userToArticleLikes[msg.sender][_articleId],
       "You have already liked this article"
     );
-    userToArticleLikes[msg.sender][_articleID] = true;
-    articleToLikes[_articleID]++;
-    emit ArticleLiked(_articleID, msg.sender, block.timestamp);
+    userToArticleLikes[msg.sender][_articleId] = true;
+    articleToLikes[_articleId]++;
+    emit ArticleLiked(_articleId, msg.sender, block.timestamp);
   }
 
   function unlikeArticle(
-    uint256 _articleID
+    uint256 _articleId
   ) public {
-    _requireArticleExists(_articleID);
+    _requireArticleExists(_articleId);
     require(
-      userToArticleLikes[msg.sender][_articleID],
+      userToArticleLikes[msg.sender][_articleId],
       "You have not liked this article yet"
     );
-    userToArticleLikes[msg.sender][_articleID] = false;
-    articleToLikes[_articleID]--;
-    emit ArticleUnliked(_articleID, msg.sender, block.timestamp);
+    userToArticleLikes[msg.sender][_articleId] = false;
+    articleToLikes[_articleId]--;
+    emit ArticleUnliked(_articleId, msg.sender, block.timestamp);
   }
 
-  function commentOnArticle(uint256 _articleID, string memory _text) public {
-    _requireArticleExists(_articleID);
+  function commentOnArticle(uint256 _articleId, string memory _text) public {
+    require(
+      articleBuyers[_articleId][msg.sender],
+      "You must buy the article to comment on it"
+    );
+    _requireArticleExists(_articleId);
     // set max length at 250 characters
     require(
       bytes(_text).length <= 250, "Comment must be less than 250 characters"
     );
-    uint256 commentIndex = articleToComments[_articleID].length;
-    articleToComments[_articleID].push(Comment(msg.sender, _text, commentIndex));
+    uint256 commentIndex = articleToComments[_articleId].length;
+    articleToComments[_articleId].push(Comment(msg.sender, _text, commentIndex));
     emit ArticleCommented(
-      _articleID, msg.sender, _text, commentIndex, block.timestamp
+      _articleId, msg.sender, _text, commentIndex, block.timestamp
     );
   }
 
-  function deleteComment(uint256 _articleID, uint256 _commentID) public {
-    _requireArticleExists(_articleID);
+  function deleteComment(uint256 _articleId, uint256 _commentID) public {
+    _requireArticleExists(_articleId);
     require(
-      articleCommentToUser[_articleID][_commentID] == msg.sender,
+      articleCommentToUser[_articleId][_commentID] == msg.sender,
       "You can't erase what you didn't article!"
     );
-    delete articleCommentToUser[_articleID][_commentID];
-    delete articleToComments[_articleID][_commentID];
-    emit ArticleCommentDeleted(_articleID, msg.sender, block.timestamp);
+    delete articleCommentToUser[_articleId][_commentID];
+    delete articleToComments[_articleId][_commentID];
+    emit ArticleCommentDeleted(_articleId, msg.sender, block.timestamp);
   }
 
-  function shareArticle(
-    uint256 _articleID
-  ) public {
-    _requireArticleExists(_articleID);
-    userToBookmarkedArticles[msg.sender].push(_articleID);
-    // userToBookmarkedArticleIndex[msg.sender][_articleID] =
-    //   userToBookmarkedArticles[msg.sender].length - 1;
-    emit ArticleBookmarked(_articleID, msg.sender, block.timestamp);
+  // Function to bookmark an article
+  function bookmarkArticle(
+    uint256 _articleId
+  ) external {
+    _requireArticleExists(_articleId);
+    require(
+      !userToArticleBookmark[msg.sender][_articleId],
+      "Article already bookmarked"
+    );
+
+    userToArticleBookmark[msg.sender][_articleId] = true;
+    articleToBookmarks[_articleId] += 1;
+
+    userToBookmarkedArticles[msg.sender].push(_articleId);
+    userToBookmarkedArticleIndex[msg.sender][_articleId] =
+      userToBookmarkedArticles[msg.sender].length - 1;
+
+    emit ArticleBookmarked(_articleId, msg.sender, block.timestamp);
   }
 
-  function deleteBookmarkedArticle(
-    uint256 _articleID
+  function removeBookmark(
+    uint256 _articleId
   ) public {
-    _requireArticleExists(_articleID);
+    _requireArticleExists(_articleId);
 
-    // Retrieve the index of the article to be deleted
-    uint256 index = userToBookmarkedArticleIndex[msg.sender][_articleID];
+    require(
+      userToArticleBookmark[msg.sender][_articleId], "Article not bookmarked"
+    );
 
-    // Set the article to a default value (e.g., 0)
-    userToBookmarkedArticles[msg.sender][index] = 0;
+    userToArticleBookmark[msg.sender][_articleId] = false;
+    articleToBookmarks[_articleId] -= 1;
 
-    // Delete the index entry for the deleted article
-    delete userToBookmarkedArticleIndex[msg.sender][_articleID];
+    uint256 index = userToBookmarkedArticleIndex[msg.sender][_articleId];
+    uint256 lastArticleId = userToBookmarkedArticles[msg.sender][userToBookmarkedArticles[msg
+      .sender].length - 1];
+
+    userToBookmarkedArticles[msg.sender][index] = lastArticleId;
+    userToBookmarkedArticleIndex[msg.sender][lastArticleId] = index;
+
+    userToBookmarkedArticles[msg.sender].pop();
+    delete userToBookmarkedArticleIndex[msg.sender][_articleId];
 
     // Emit the ArticleUnshared event
-    emit ArticleUnshared(_articleID, msg.sender, block.timestamp);
+    emit RemoveBookmark(_articleId, msg.sender, block.timestamp);
   }
 
   function followUser(
@@ -244,8 +353,8 @@ contract BasedShop {
   //////////////////////////////////////////////////////////////*/
 
   function _requireArticleExists(
-    uint256 _articleID
+    uint256 _articleId
   ) internal view {
-    require(basedArticles.tokenId() >= _articleID, "Article does not exist");
+    require(basedArticles.tokenId() >= _articleId, "Article does not exist");
   }
 }

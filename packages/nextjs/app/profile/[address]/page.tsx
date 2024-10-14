@@ -41,7 +41,7 @@ const ProfilePage: NextPage = () => {
     error: createErrorReadingEvents,
   } = useScaffoldEventHistory({
     contractName: "BasedShop",
-    eventName: "PostCreated",
+    eventName: "ArticleCreated",
     fromBlock: 0n,
     watch: true,
   });
@@ -64,7 +64,7 @@ const ProfilePage: NextPage = () => {
             const { args } = event;
             const user = args?.user;
             const tokenURI = args?.tokenURI;
-            const date = args?.timestamp;
+            const date = args?.date;
 
             if (args?.user !== address) continue;
             if (!tokenURI) continue;
@@ -143,6 +143,12 @@ const ProfilePage: NextPage = () => {
             onClick={() => handleTabClick("Bought")}
           >
             Bought
+          </button>
+          <button
+            className={`tab text-red-600 ${activeTab === "Saved" ? "active" : ""}`}
+            onClick={() => handleTabClick("Saved")}
+          >
+            Saved
           </button>
           <button
             className={`tab text-red-600 ${activeTab === "Activity" ? "active" : ""}`}

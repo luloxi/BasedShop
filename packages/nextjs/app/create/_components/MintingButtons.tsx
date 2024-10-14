@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { uploadToPinata } from "~~/utils/pinata-upload";
@@ -7,14 +8,14 @@ import { notification } from "~~/utils/scaffold-eth";
 // Import the Pinata upload function
 
 interface MintingFormProps {
-  description: string;
-  image: string;
+  price: string;
+  amount: string;
   yourJSON: object;
   resetForm: () => void;
   onPostCreated: () => void;
 }
 
-export const MintingButtons: React.FC<MintingFormProps> = ({ yourJSON, resetForm, onPostCreated }) => {
+export const MintingButtons: React.FC<MintingFormProps> = ({ price, amount, yourJSON, resetForm, onPostCreated }) => {
   const { address: connectedAddress } = useAccount();
   const { writeContractAsync } = useScaffoldWriteContract("BasedShop");
 
@@ -49,9 +50,12 @@ export const MintingButtons: React.FC<MintingFormProps> = ({ yourJSON, resetForm
     try {
       const ipfsPath = await uploadToIPFS();
 
+      // Convert price from ether to wei
+      const priceInWei = parseEther(price.toString());
+
       const contractResponse = await writeContractAsync({
-        functionName: "createPost",
-        args: [ipfsPath],
+        functionName: "createArticle",
+        args: [ipfsPath, priceInWei, BigInt(amount.toString())],
       });
 
       if (contractResponse) {

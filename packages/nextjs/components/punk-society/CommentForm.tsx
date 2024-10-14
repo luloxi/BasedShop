@@ -36,7 +36,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
 
     try {
       await writeContractAsync({
-        functionName: "commentOnPost",
+        functionName: "commentOnArticle",
         args: [postId, comment],
       });
       notification.success("Comment added successfully!");

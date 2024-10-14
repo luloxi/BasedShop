@@ -16,14 +16,14 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId }) => {
 
   const { data: isLikedPost } = useScaffoldReadContract({
     contractName: "BasedShop",
-    functionName: "userToPostLikes",
+    functionName: "userToArticleLikes",
     args: [connectedAddress, postId],
     watch: true,
   });
 
   const { data: postLikes } = useScaffoldReadContract({
     contractName: "BasedShop",
-    functionName: "postToLikes",
+    functionName: "articleToLikes",
     args: [postId],
     watch: true,
   });
@@ -39,7 +39,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId }) => {
 
     try {
       await writeContractAsync({
-        functionName: "likePost",
+        functionName: "likeArticle",
         args: [postId],
       });
       notification.success("Liked successfully!");
@@ -56,7 +56,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ postId }) => {
 
     try {
       await writeContractAsync({
-        functionName: "unlikePost",
+        functionName: "unlikeArticle",
         args: [postId],
       });
       notification.success("Unliked successfully!");

@@ -828,124 +828,53 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "basedArticles",
-          inputs: [],
+          name: "articleAmounts",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [
             {
               name: "",
-              type: "address",
-              internalType: "contract BasedArticles",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "commentOnPost",
+          name: "articleBuyers",
           inputs: [
             {
-              name: "_postID",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "_text",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "createPost",
-          inputs: [
-            {
-              name: "_tokenURI",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "deleteComment",
-          inputs: [
-            {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_commentID",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "deletePost",
-          inputs: [
-            {
-              name: "_postId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "deleteSharedPost",
-          inputs: [
-            {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "followUser",
-          inputs: [
-            {
-              name: "_userAddress",
+              name: "",
               type: "address",
               internalType: "address",
             },
           ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "likePost",
-          inputs: [
+          outputs: [
             {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
+              name: "",
+              type: "bool",
+              internalType: "bool",
             },
           ],
-          outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "view",
         },
         {
           type: "function",
-          name: "postCommentToUser",
+          name: "articleCommentToUser",
           inputs: [
             {
-              name: "postId",
+              name: "articleId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -966,7 +895,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postIdToUser",
+          name: "articleIdToUser",
           inputs: [
             {
               name: "",
@@ -985,7 +914,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postIds",
+          name: "articleIds",
           inputs: [],
           outputs: [
             {
@@ -998,10 +927,48 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postToComments",
+          name: "articlePrices",
           inputs: [
             {
-              name: "postId",
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "articleToBookmarks",
+          inputs: [
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "bookmarks",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "articleToComments",
+          inputs: [
+            {
+              name: "articleId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1032,10 +999,10 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postToLikes",
+          name: "articleToLikes",
           inputs: [
             {
-              name: "post",
+              name: "article",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1048,6 +1015,143 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "basedArticles",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract BasedArticles",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "bookmarkArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "buyArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "payable",
+        },
+        {
+          type: "function",
+          name: "commentOnArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_text",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "createArticle",
+          inputs: [
+            {
+              name: "_tokenURI",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_price",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_amount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "deleteArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "deleteComment",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_commentID",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "followUser",
+          inputs: [
+            {
+              name: "_userAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "likeArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
         },
         {
           type: "function",
@@ -1064,12 +1168,12 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "removeFollower",
+          name: "removeBookmark",
           inputs: [
             {
-              name: "_followerAddress",
-              type: "address",
-              internalType: "address",
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           outputs: [],
@@ -1077,12 +1181,12 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "sharePost",
+          name: "removeFollower",
           inputs: [
             {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
+              name: "_followerAddress",
+              type: "address",
+              internalType: "address",
             },
           ],
           outputs: [],
@@ -1103,10 +1207,46 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "unlikePost",
+          name: "unlikeArticle",
           inputs: [
             {
-              name: "_postID",
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updateArticleAmount",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_newAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updateArticlePrice",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_newPrice",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1132,6 +1272,102 @@ const deployedContracts = {
           outputs: [
             {
               name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToArticleBookmark",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToArticleLikes",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "liked",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToBookmarkedArticleIndex",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "index",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToBookmarkedArticles",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "bookmarkedArticles",
               type: "uint256",
               internalType: "uint256",
             },
@@ -1187,95 +1423,23 @@ const deployedContracts = {
           stateMutability: "view",
         },
         {
-          type: "function",
-          name: "userToPostLikes",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "post",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "liked",
-              type: "bool",
-              internalType: "bool",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "userToSharedArticles",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "sharedArticles",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "userToSharedPostIndex",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "post",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "index",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
           type: "event",
-          name: "FollowerRemoved",
+          name: "ArticleAmountUpdated",
           inputs: [
             {
-              name: "user",
-              type: "address",
+              name: "articleId",
+              type: "uint256",
               indexed: true,
-              internalType: "address",
+              internalType: "uint256",
             },
             {
-              name: "follower",
-              type: "address",
-              indexed: true,
-              internalType: "address",
+              name: "oldAmount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
             },
             {
-              name: "timestamp",
+              name: "newAmount",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1285,10 +1449,10 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostCommentDeleted",
+          name: "ArticleBookmarked",
           inputs: [
             {
-              name: "postID",
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -1300,7 +1464,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1310,10 +1474,72 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostCommented",
+          name: "ArticleBought",
           inputs: [
             {
-              name: "postID",
+              name: "articleId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "buyer",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "seller",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "price",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ArticleCommentDeleted",
+          inputs: [
+            {
+              name: "articleID",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ArticleCommented",
+          inputs: [
+            {
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -1337,7 +1563,7 @@ const deployedContracts = {
               internalType: "uint256",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1347,10 +1573,10 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostCreated",
+          name: "ArticleCreated",
           inputs: [
             {
-              name: "postId",
+              name: "articleId",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -1368,7 +1594,19 @@ const deployedContracts = {
               internalType: "string",
             },
             {
-              name: "timestamp",
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "price",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "amount",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1378,16 +1616,16 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostDeleted",
+          name: "ArticleDeleted",
           inputs: [
             {
-              name: "postId",
+              name: "articleId",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1397,10 +1635,10 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostLiked",
+          name: "ArticleLiked",
           inputs: [
             {
-              name: "postID",
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -1412,7 +1650,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1422,10 +1660,35 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostShared",
+          name: "ArticlePriceUpdated",
           inputs: [
             {
-              name: "postID",
+              name: "articleId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "oldPrice",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "newPrice",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ArticleUnliked",
+          inputs: [
+            {
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -1437,7 +1700,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1447,10 +1710,35 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostUnliked",
+          name: "FollowerRemoved",
           inputs: [
             {
-              name: "postID",
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "follower",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "RemoveBookmark",
+          inputs: [
+            {
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -1462,32 +1750,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "PostUnshared",
-          inputs: [
-            {
-              name: "postID",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "user",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1512,7 +1775,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1537,7 +1800,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -1551,7 +1814,7 @@ const deployedContracts = {
   },
   84532: {
     BasedArticles: {
-      address: "0x6a5eEc3b5dca94574DB5b7afc1170dFf2a9D02e4",
+      address: "0x50D3b264F8248349107fA16F484EE8CF2b3b7632",
       abi: [
         {
           type: "constructor",
@@ -2252,7 +2515,7 @@ const deployedContracts = {
       },
     },
     BasedProfile: {
-      address: "0x409c0EdbF1E96F55c404C9B6C0DC212F1EaEbdba",
+      address: "0xBEB421204BF579fCE8C6C405CFDcba0AE28F7Ec5",
       abi: [
         {
           type: "function",
@@ -2352,7 +2615,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     BasedShop: {
-      address: "0xe27221757Cc5e3c6b2D9C4032238F99734DeBd35",
+      address: "0x15fAd4a4d08b07b017392487adE07c2DDFdfd88D",
       abi: [
         {
           type: "constructor",
@@ -2372,124 +2635,53 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "basedArticles",
-          inputs: [],
+          name: "articleAmounts",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
           outputs: [
             {
               name: "",
-              type: "address",
-              internalType: "contract BasedArticles",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           stateMutability: "view",
         },
         {
           type: "function",
-          name: "commentOnPost",
+          name: "articleBuyers",
           inputs: [
             {
-              name: "_postID",
+              name: "",
               type: "uint256",
               internalType: "uint256",
             },
             {
-              name: "_text",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "createPost",
-          inputs: [
-            {
-              name: "_tokenURI",
-              type: "string",
-              internalType: "string",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "deleteComment",
-          inputs: [
-            {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
-            },
-            {
-              name: "_commentID",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "deletePost",
-          inputs: [
-            {
-              name: "_postId",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "deleteSharedPost",
-          inputs: [
-            {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "followUser",
-          inputs: [
-            {
-              name: "_userAddress",
+              name: "",
               type: "address",
               internalType: "address",
             },
           ],
-          outputs: [],
-          stateMutability: "nonpayable",
-        },
-        {
-          type: "function",
-          name: "likePost",
-          inputs: [
+          outputs: [
             {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
+              name: "",
+              type: "bool",
+              internalType: "bool",
             },
           ],
-          outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "view",
         },
         {
           type: "function",
-          name: "postCommentToUser",
+          name: "articleCommentToUser",
           inputs: [
             {
-              name: "postId",
+              name: "articleId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -2510,7 +2702,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postIdToUser",
+          name: "articleIdToUser",
           inputs: [
             {
               name: "",
@@ -2529,7 +2721,7 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postIds",
+          name: "articleIds",
           inputs: [],
           outputs: [
             {
@@ -2542,10 +2734,48 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postToComments",
+          name: "articlePrices",
           inputs: [
             {
-              name: "postId",
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "articleToBookmarks",
+          inputs: [
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "bookmarks",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "articleToComments",
+          inputs: [
+            {
+              name: "articleId",
               type: "uint256",
               internalType: "uint256",
             },
@@ -2576,10 +2806,10 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "postToLikes",
+          name: "articleToLikes",
           inputs: [
             {
-              name: "post",
+              name: "article",
               type: "uint256",
               internalType: "uint256",
             },
@@ -2592,6 +2822,143 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "basedArticles",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "contract BasedArticles",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "bookmarkArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "buyArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "payable",
+        },
+        {
+          type: "function",
+          name: "commentOnArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_text",
+              type: "string",
+              internalType: "string",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "createArticle",
+          inputs: [
+            {
+              name: "_tokenURI",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_price",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_amount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "deleteArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "deleteComment",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_commentID",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "followUser",
+          inputs: [
+            {
+              name: "_userAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "likeArticle",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
         },
         {
           type: "function",
@@ -2608,12 +2975,12 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "removeFollower",
+          name: "removeBookmark",
           inputs: [
             {
-              name: "_followerAddress",
-              type: "address",
-              internalType: "address",
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
             },
           ],
           outputs: [],
@@ -2621,12 +2988,12 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "sharePost",
+          name: "removeFollower",
           inputs: [
             {
-              name: "_postID",
-              type: "uint256",
-              internalType: "uint256",
+              name: "_followerAddress",
+              type: "address",
+              internalType: "address",
             },
           ],
           outputs: [],
@@ -2647,10 +3014,46 @@ const deployedContracts = {
         },
         {
           type: "function",
-          name: "unlikePost",
+          name: "unlikeArticle",
           inputs: [
             {
-              name: "_postID",
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updateArticleAmount",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_newAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "updateArticlePrice",
+          inputs: [
+            {
+              name: "_articleId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_newPrice",
               type: "uint256",
               internalType: "uint256",
             },
@@ -2676,6 +3079,102 @@ const deployedContracts = {
           outputs: [
             {
               name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToArticleBookmark",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToArticleLikes",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "liked",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToBookmarkedArticleIndex",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "article",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "index",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "userToBookmarkedArticles",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "bookmarkedArticles",
               type: "uint256",
               internalType: "uint256",
             },
@@ -2731,95 +3230,23 @@ const deployedContracts = {
           stateMutability: "view",
         },
         {
-          type: "function",
-          name: "userToPostLikes",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "post",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "liked",
-              type: "bool",
-              internalType: "bool",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "userToSharedArticles",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "sharedArticles",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
-          type: "function",
-          name: "userToSharedPostIndex",
-          inputs: [
-            {
-              name: "user",
-              type: "address",
-              internalType: "address",
-            },
-            {
-              name: "post",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          outputs: [
-            {
-              name: "index",
-              type: "uint256",
-              internalType: "uint256",
-            },
-          ],
-          stateMutability: "view",
-        },
-        {
           type: "event",
-          name: "FollowerRemoved",
+          name: "ArticleAmountUpdated",
           inputs: [
             {
-              name: "user",
-              type: "address",
+              name: "articleId",
+              type: "uint256",
               indexed: true,
-              internalType: "address",
+              internalType: "uint256",
             },
             {
-              name: "follower",
-              type: "address",
-              indexed: true,
-              internalType: "address",
+              name: "oldAmount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
             },
             {
-              name: "timestamp",
+              name: "newAmount",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2829,10 +3256,10 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostCommentDeleted",
+          name: "ArticleBookmarked",
           inputs: [
             {
-              name: "postID",
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -2844,7 +3271,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2854,10 +3281,72 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostCommented",
+          name: "ArticleBought",
           inputs: [
             {
-              name: "postID",
+              name: "articleId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "buyer",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "seller",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "price",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ArticleCommentDeleted",
+          inputs: [
+            {
+              name: "articleID",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ArticleCommented",
+          inputs: [
+            {
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -2881,7 +3370,7 @@ const deployedContracts = {
               internalType: "uint256",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2891,10 +3380,10 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostCreated",
+          name: "ArticleCreated",
           inputs: [
             {
-              name: "postId",
+              name: "articleId",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -2912,7 +3401,19 @@ const deployedContracts = {
               internalType: "string",
             },
             {
-              name: "timestamp",
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "price",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "amount",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2922,16 +3423,16 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostDeleted",
+          name: "ArticleDeleted",
           inputs: [
             {
-              name: "postId",
+              name: "articleId",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2941,10 +3442,10 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostLiked",
+          name: "ArticleLiked",
           inputs: [
             {
-              name: "postID",
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -2956,7 +3457,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2966,10 +3467,35 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostShared",
+          name: "ArticlePriceUpdated",
           inputs: [
             {
-              name: "postID",
+              name: "articleId",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+            {
+              name: "oldPrice",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "newPrice",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "ArticleUnliked",
+          inputs: [
+            {
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -2981,7 +3507,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -2991,10 +3517,35 @@ const deployedContracts = {
         },
         {
           type: "event",
-          name: "PostUnliked",
+          name: "FollowerRemoved",
           inputs: [
             {
-              name: "postID",
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "follower",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "date",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "RemoveBookmark",
+          inputs: [
+            {
+              name: "articleID",
               type: "uint256",
               indexed: true,
               internalType: "uint256",
@@ -3006,32 +3557,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
-              type: "uint256",
-              indexed: false,
-              internalType: "uint256",
-            },
-          ],
-          anonymous: false,
-        },
-        {
-          type: "event",
-          name: "PostUnshared",
-          inputs: [
-            {
-              name: "postID",
-              type: "uint256",
-              indexed: true,
-              internalType: "uint256",
-            },
-            {
-              name: "user",
-              type: "address",
-              indexed: true,
-              internalType: "address",
-            },
-            {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -3056,7 +3582,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
@@ -3081,7 +3607,7 @@ const deployedContracts = {
               internalType: "address",
             },
             {
-              name: "timestamp",
+              name: "date",
               type: "uint256",
               indexed: false,
               internalType: "uint256",
