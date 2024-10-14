@@ -8,6 +8,7 @@ import { PunkBalance } from "./punk-society/PunkBalance";
 import { PunkConnectButton } from "./punk-society/PunkConnectButton";
 import { FaucetButton } from "./scaffold-eth";
 import { useAccount } from "wagmi";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { BellIcon, EnvelopeIcon, HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
@@ -116,8 +117,17 @@ export const Header = () => {
       </div>
 
       <div className="navbar-end relative lg:mr-2">
-        <div className="flex justify-center items-center  ">
-          <div className="hidden md:flex lg:mr-2">
+        <div className="flex justify-center items-center gap-3">
+          <Link href="/not-found" passHref>
+            <button
+              className={`p-2 rounded-full bg-red-600 text-white border-none hidden lg:flex flex-row items-center justify-center text-xl ${
+                pathname === "/shoppingcart" ? "text-blue-600" : ""
+              }`}
+            >
+              <ShoppingCartIcon className="h-6 w-6" />
+            </button>
+          </Link>
+          <div className="hidden md:flex">
             <PunkBalance address={connectedAddress} />
           </div>
 
@@ -125,7 +135,7 @@ export const Header = () => {
             <PunkConnectButton />
           </div>
 
-          <div className="mr-4">
+          <div className="">
             <FaucetButton />
           </div>
         </div>
