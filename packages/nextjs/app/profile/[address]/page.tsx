@@ -7,7 +7,7 @@ import { LoadingBars } from "../../../components/punk-society/LoadingBars";
 import { NewsFeed } from "../../../components/punk-society/NewsFeed";
 import ProfileInfo from "../_components/ProfileInfo";
 import { NextPage } from "next";
-import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { getMetadataFromIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
