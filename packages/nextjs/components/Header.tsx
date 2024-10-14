@@ -118,15 +118,17 @@ export const Header = () => {
 
       <div className="navbar-end relative lg:mr-2">
         <div className="flex justify-center items-center gap-3">
-          <Link href="/not-found" passHref>
-            <button
-              className={`p-2 rounded-full bg-red-600 text-white border-none hidden lg:flex flex-row items-center justify-center text-xl ${
-                pathname === "/shoppingcart" ? "text-blue-600" : ""
-              }`}
-            >
-              <ShoppingCartIcon className="h-6 w-6" />
-            </button>
-          </Link>
+          <div className="hidden md:flex">
+            <Link href="/not-found" passHref>
+              <button
+                className={`p-2 rounded-full bg-red-600 text-white border-none hidden lg:flex flex-row items-center justify-center text-xl ${
+                  pathname === "/shoppingcart" ? "text-blue-600" : ""
+                }`}
+              >
+                <ShoppingCartIcon className="h-6 w-6" />
+              </button>
+            </Link>
+          </div>
           <div className="hidden md:flex">
             <PunkBalance address={connectedAddress} />
           </div>
@@ -135,7 +137,7 @@ export const Header = () => {
             <PunkConnectButton />
           </div>
 
-          <div className="">
+          <div className="hidden md:flex">
             <FaucetButton />
           </div>
         </div>
