@@ -1,5 +1,6 @@
 {
-  "name": "Scaffold-ETH 2 DApp",
+  "name": "BasedShop",
   "description": "A DApp built with Scaffold-ETH",
-  "iconPath": "logo.svg"
+  "iconPath": "logo.svg",
+  "display": "standalone"
 }
