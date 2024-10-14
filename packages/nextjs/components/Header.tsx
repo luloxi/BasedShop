@@ -116,7 +116,7 @@ export const Header = () => {
         </div> */}
       </div>
 
-      <div className="navbar-end relative lg:mr-2">
+      <div className="navbar-end relative mr-2">
         <div className="flex justify-center items-center gap-3">
           <div className="hidden md:flex">
             <Link href="/not-found" passHref>
