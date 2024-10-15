@@ -21,7 +21,7 @@ export interface Post extends Partial<NFTMetaData> {
 }
 
 const ProfilePage: NextPage = () => {
-  const [activeTab, setActiveTab] = useState("Listed");
+  const [activeTab, setActiveTab] = useState("Bought");
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
@@ -38,16 +38,16 @@ const ProfilePage: NextPage = () => {
   return (
     <>
       <ProfileInfo address={address} />
-      <div className="flex flex-col items-center justify-center">
-        <div className="tabs-bar ">
-          <button className={`tab  ${activeTab === "Listed" ? "active" : ""}`} onClick={() => handleTabClick("Listed")}>
-            Listed
-          </button>
+      <div className="flex items-center justify-center">
+        <div className="tabs-bar overflow-x-auto whitespace-nowrap flex">
           <button className={`tab ${activeTab === "Bought" ? "active" : ""}`} onClick={() => handleTabClick("Bought")}>
             Bought
           </button>
-          <button className={`tab 0 ${activeTab === "Saved" ? "active" : ""}`} onClick={() => handleTabClick("Saved")}>
+          <button className={`tab ${activeTab === "Saved" ? "active" : ""}`} onClick={() => handleTabClick("Saved")}>
             Saved
+          </button>
+          <button className={`tab ${activeTab === "Listed" ? "active" : ""}`} onClick={() => handleTabClick("Listed")}>
+            Listed
           </button>
           <button
             className={`tab text-red-600 ${activeTab === "Activity" ? "active" : ""}`}
@@ -55,17 +55,12 @@ const ProfilePage: NextPage = () => {
           >
             Activity
           </button>
-          <button
-            className={`tab text-red-600 ${activeTab === "Revenue" ? "active" : ""}`}
-            onClick={() => handleTabClick("Revenue")}
-          >
-            Revenue
-          </button>
         </div>
-        {activeTab === "Listed" && <ListedArticles />}
-        {activeTab === "Bought" && <BoughtArticles />}
-        {activeTab === "Saved" && <BookmarkedArticles />}
       </div>
+
+      {activeTab === "Bought" && <BoughtArticles />}
+      {activeTab === "Saved" && <BookmarkedArticles />}
+      {activeTab === "Listed" && <ListedArticles />}
     </>
   );
 };

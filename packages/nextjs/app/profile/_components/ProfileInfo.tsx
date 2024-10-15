@@ -87,13 +87,13 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
     <div>
       {/* User Profile Section */}
       {loadingProfile ? (
-        <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full m-2">
-          <div className="flex items-center justify-center w-full h-full">
+        <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full my-2">
+          <div className="flex items-center justify-center w-full">
             <LoadingBars />
           </div>
         </div>
       ) : (
-        <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full m-2">
+        <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full my-2">
           {/* Profile Picture */}
           <div className="avatar ">
             <ProfilePictureUpload

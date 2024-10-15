@@ -31,7 +31,7 @@
   display: flex;
   justify-content: center;
   items-align: center;
-  padding-bottom: 7px;
+  padding-bottom: 8px;
   border-bottom: 1px solid;
   max-width: 500px;
 }
