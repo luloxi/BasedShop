@@ -90,9 +90,12 @@ export const Footer = () => {
         </div>
       </div>
       <footer className="sticky lg:hidden bottom-0 w-full bg-base-100 px-4 py-2 flex justify-around items-center">
-        <Link href="/not-found" passHref>
-          <ShoppingCartIcon
-            className={`h-6 w-6 text-red-600 ${pathname === "/cart" ? "text-blue-600" : "hover:text-blue-600"}`}
+        <Link href="/" passHref>
+          <HomeIcon className={`h-6 w-6 ${pathname === "/" ? "text-blue-600" : "hover:text-blue-600"}`} />
+        </Link>
+        <Link href="/search" passHref>
+          <MagnifyingGlassIcon
+            className={`h-6 w-6 ${pathname === "/search" ? "text-blue-600" : "hover:text-blue-600"}`}
           />
         </Link>
 
@@ -105,20 +108,8 @@ export const Footer = () => {
         </Link>
 
         <Link href="/not-found" passHref>
-          <PlusIcon
-            className={`h-6 w-6 text-red-600 ${
-              pathname === "/notifications" ? "text-blue-600" : "hover:text-blue-600"
-            }`}
-          />
-        </Link>
-
-        <Link href="/" passHref>
-          <HomeIcon className={`h-6 w-6 ${pathname === "/" ? "text-blue-600" : "hover:text-blue-600"}`} />
-        </Link>
-
-        <Link href="/search" passHref>
-          <MagnifyingGlassIcon
-            className={`h-6 w-6 ${pathname === "/search" ? "text-blue-600" : "hover:text-blue-600"}`}
+          <ShoppingCartIcon
+            className={`h-6 w-6 text-red-600 ${pathname === "/cart" ? "text-blue-600" : "hover:text-blue-600"}`}
           />
         </Link>
       </footer>
