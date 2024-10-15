@@ -1,10 +1,18 @@
 import { create } from "kubo-rpc-client";
 
 // Pinata gateway configuration
-const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs/";
+// const PINATA_GATEWAY = "https://gateway.pinata.cloud/ipfs/";
+
+// export const ipfsClient = create({
+//   host: "gateway.pinata.cloud",
+//   port: 443,
+//   protocol: "https",
+// });
+
+const PINATA_GATEWAY = "https://ipfs.io/ipfs/";
 
 export const ipfsClient = create({
-  host: "gateway.pinata.cloud",
+  host: "ipfs.io",
   port: 443,
   protocol: "https",
 });

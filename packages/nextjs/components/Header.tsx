@@ -10,24 +10,12 @@ import { FaucetButton } from "./scaffold-eth";
 import { useAccount } from "wagmi";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { BellIcon, HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 /**
  * Site header
  */
 export const Header = () => {
   const { address: connectedAddress } = useAccount();
-
-  const { data: profileInfo } = useScaffoldReadContract({
-    contractName: "BasedProfile",
-    functionName: "profiles",
-    args: [connectedAddress],
-    watch: true,
-  });
-
-  const defaultProfilePicture = "/guest-profile.jpg";
-
-  const profilePicture = profileInfo && profileInfo[2] ? profileInfo[2] : defaultProfilePicture;
 
   const pathname = usePathname();
 
@@ -130,22 +118,8 @@ export const Header = () => {
           </div>
         </div>
         <div className="flex flex-row items-center justify-center gap-3">
-          {/* <div className="lg:mr-2"></div> */}
-
-          <div className="hidden lg:flex">
-            <Link href={`/profile/${connectedAddress}`} passHref>
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
-                style={{
-                  backgroundImage: `url(${profilePicture})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-            </Link>
-            <div className="lg:ml-4">
-              <SwitchTheme />
-            </div>
+          <div className="hidden lg:flex ">
+            <SwitchTheme />
           </div>
         </div>
       </div>

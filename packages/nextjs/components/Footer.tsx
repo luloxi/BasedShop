@@ -3,29 +3,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Create from "../app/create/Create";
 import Modal from "../app/create/Modal";
-import { useAccount } from "wagmi";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { BellIcon, HomeIcon, MagnifyingGlassIcon, PlusIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 export const Footer = () => {
   const pathname = usePathname();
   const [showPlusIcon, setShowPlusIcon] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  const { address: connectedAddress } = useAccount();
-
-  const { data: punkProfile } = useScaffoldReadContract({
-    contractName: "BasedProfile",
-    functionName: "profiles",
-    args: [connectedAddress],
-    watch: true,
-  });
-
-  const defaultProfilePicture = "/guest-profile.jpg";
-
-  const profilePicture = punkProfile && punkProfile[2] ? punkProfile[2] : defaultProfilePicture;
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -136,18 +121,6 @@ export const Footer = () => {
             className={`h-6 w-6 ${pathname === "/search" ? "text-blue-600" : "hover:text-blue-600"}`}
           />
         </Link>
-        <div className="flex flex-row items-center justify-center gap-3">
-          <Link href={`/profile/${connectedAddress}`} passHref>
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
-              style={{
-                backgroundImage: `url(${profilePicture})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
-          </Link>
-        </div>
       </footer>
     </>
   );

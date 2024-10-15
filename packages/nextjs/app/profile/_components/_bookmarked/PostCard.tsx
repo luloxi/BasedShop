@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import BookmarkButton from "../../../../components/punk-society/BookmarkButton";
+import { Avatar, Identity } from "@coinbase/onchainkit/identity";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { MagnifyingGlassPlusIcon, ShareIcon, ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -28,13 +29,6 @@ export const PostCard = ({ post }: { post: Post }) => {
   const { address: connectedAddress } = useAccount();
   const { writeContractAsync } = useScaffoldWriteContract("BasedShop");
 
-  const { data: profileInfo } = useScaffoldReadContract({
-    contractName: "BasedProfile",
-    functionName: "profiles",
-    args: [post.user],
-    watch: true,
-  });
-
   const { data: articlePrice } = useScaffoldReadContract({
     contractName: "BasedShop",
     functionName: "articlePrices",
@@ -55,10 +49,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     args: [connectedAddress, BigInt(post.postId || 0)],
     watch: true,
   });
-
-  const defaultProfilePicture = "/guest-profile.jpg";
-
-  const profilePicture = profileInfo && profileInfo[2] ? profileInfo[2] : defaultProfilePicture;
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -131,14 +121,13 @@ export const PostCard = ({ post }: { post: Post }) => {
           <div className="flex flex-row justify-center items-center gap-3">
             <p className="my-0 text-sm">{post.date ? formatDate(Number(post.date)) : "No date available"}</p>
             <Link href={`/profile/${post.user}`} passHref>
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
-                style={{
-                  backgroundImage: `url(${profilePicture})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
+              <Identity
+                className="bg-transparent p-0 w-7 h-7"
+                address={post.user}
+                schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+              >
+                <Avatar className="w-7 h-7" />
+              </Identity>
             </Link>
           </div>
         </div>
@@ -206,8 +195,8 @@ export const PostCard = ({ post }: { post: Post }) => {
                 Buy
               </button>
 
-              <button className="p-2 rounded-full bg-red-600 text-white">
-                <ShoppingCartIcon className="h-5 w-5" />
+              <button className="flex flex-row p-2 rounded-full bg-red-600 text-white">
+                + <ShoppingCartIcon className="h-5 w-5" />
               </button>
             </div>
           </div>

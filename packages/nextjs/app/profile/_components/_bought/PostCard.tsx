@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import BookmarkButton from "../../../../components/punk-society/BookmarkButton";
-import { ProfileAddress } from "../../../../components/punk-society/ProfileAddress";
+import { Avatar, Badge, Identity, Name } from "@coinbase/onchainkit/identity";
 import { formatEther } from "viem";
 import { MagnifyingGlassPlusIcon, ShareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
@@ -99,7 +100,20 @@ export const PostCard = ({ post }: { post: Post }) => {
           <div className="flex flex-col justify-center w-2/3 pl-4">
             <span className="my-0 text-lg">{post.description ?? "No description available."}</span>
             <span className="mt-2 flex flex-row items-center justify-start gap-3 text-lg italic">
-              Contact seller: <ProfileAddress address={post.user} />
+              Contact seller:{" "}
+              <Link href={`/profile/${post.user}`} passHref>
+                <Identity
+                  className="bg-transparent p-0 "
+                  address={post.user}
+                  schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+                >
+                  <Avatar className="w-7 h-7" />
+                  <Name>
+                    <Badge />
+                  </Name>
+                </Identity>
+              </Link>
+              {/* <ProfileAddress address={post.user} /> */}
             </span>
           </div>
         </div>

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ProfilePictureUpload from "./ProfilePictureUpload";
 import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
+import { Avatar, Badge, Identity, Name } from "@coinbase/onchainkit/identity";
 import { useAccount } from "wagmi";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/punk-society/InputBase";
 import { LoadingBars } from "~~/components/punk-society/LoadingBars";
+import { PunkBalance } from "~~/components/punk-society/PunkBalance";
+import { PunkConnectButton } from "~~/components/punk-society/PunkConnectButton";
 import { TextInput } from "~~/components/punk-society/TextInput";
-import { Address, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -17,11 +19,7 @@ interface ProfileInfoProps {
 }
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
-  const defaultProfilePicture = "/guest-profile.jpg";
-
-  const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
-  const [profilePicture, setProfilePicture] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false); // New state for edit mode
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -49,15 +47,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
 
   const handleEditProfile = async () => {
     try {
-      // Check if the current profile picture is the default one
-      if (profilePicture === defaultProfilePicture) {
-        // Unset the current profile picture before editing the profile
-        setProfilePicture("");
-      }
-
       await punkProfileWriteAsync({
         functionName: "setProfile",
-        args: [username, bio, profilePicture, email],
+        args: [bio, email],
       });
 
       notification.success("Profile Edited Successfully");
@@ -72,10 +64,8 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
 
   useEffect(() => {
     if (!isEditing && punkProfile) {
-      setUsername(punkProfile[0] || "");
-      setBio(punkProfile[1] || "");
-      setProfilePicture(punkProfile[2] ? punkProfile[2] : defaultProfilePicture);
-      setEmail(punkProfile[3] || "");
+      setBio(punkProfile[0] || "");
+      setEmail(punkProfile[1] || "");
       setLoadingProfile(false);
     }
   }, [punkProfile, isEditing]);
@@ -97,27 +87,38 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
       ) : (
         <div className="relative flex flex-col md:flex-row justify-between items-center bg-base-100 p-6 rounded-lg shadow-md w-full my-2">
           {/* Profile Picture */}
-          <div className="avatar ">
-            <ProfilePictureUpload
-              isEditing={isEditing}
-              profilePicture={profilePicture}
-              setProfilePicture={setProfilePicture}
-            />
-          </div>
+
+          <Identity
+            className="bg-transparent p-0 w-28 h-28"
+            address={address}
+            schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+          >
+            <Avatar className="w-28 h-28" />
+          </Identity>
+
           {/* User Info Section */}
           <div className="flex flex-col justify-center items-center">
             {isEditing ? (
               ""
             ) : (
               <>
-                <h2 className="text-2xl font-bold">{username || "Guest user"}</h2>
+                <Identity
+                  className="bg-transparent p-0 "
+                  address={address}
+                  schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+                >
+                  <Name className="text-2xl font-bold text-black dark:text-white">
+                    <Badge />
+                  </Name>
+                </Identity>
+                {/* <h2 className="text-2xl font-bold">{username || "Guest user"}</h2> */}
                 <span>
                   {email ? (
                     <a href={`mailto:${email}`} className="text-blue-500 underline">
                       {email}
                     </a>
                   ) : (
-                    "no email provided"
+                    ""
                   )}
                 </span>
                 {bio && <p className="text-base-content">{bio}</p>}
@@ -125,7 +126,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
                   {address === connectedAddress ? (
                     <div className="flex flex-col md:flex-row items-center justify-center gap-3">
                       <div>
-                        <RainbowKitCustomConnectButton />
+                        <PunkBalance address={connectedAddress} />
+
+                        <PunkConnectButton />
                       </div>
                       <div className="bg-base-200 rounded-lg">
                         <FundButton fundingUrl={onrampBuyUrl} />
@@ -146,10 +149,13 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
           {isEditing ? (
             <div className="flex flex-col justify-center items-center flex-grow text-center gap-3 md:mx-auto mt-4 md:mt-0">
               <>
-                <InputBase placeholder="Your Name" value={username} onChange={setUsername} />
                 <TextInput placeholder="Your Bio" content={bio} setContent={setBio} />
                 {/* <InputBase placeholder="Your Bio" value={bio} onChange={setBio} /> */}
                 <InputBase placeholder="Your Email" value={email} onChange={setEmail} />
+
+                <a className="underline" href="https://www.base.org/names" target="_blank" rel="noopener noreferrer">
+                  Change your basename and profile picture
+                </a>
               </>
             </div>
           ) : (

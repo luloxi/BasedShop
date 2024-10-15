@@ -40,12 +40,6 @@ export const PunkConnectButton = () => {
 
               return (
                 <>
-                  {/* <div className="flex flex-col items-center mr-1">
-                    <Balance address={account.address as Address} usdMode={true} className="min-h-0 h-auto" />
-                    <span className="text-xs" style={{ color: networkColor }}>
-                      {chain.name}
-                    </span>
-                  </div> */}
                   <AddressInfoDropdown
                     address={account.address as Address}
                     displayName={account.displayName}
