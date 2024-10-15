@@ -5,9 +5,8 @@ import Image from "next/image";
 import BookmarkButton from "../../../../components/punk-society/BookmarkButton";
 import { ProfileAddress } from "../../../../components/punk-society/ProfileAddress";
 import { formatEther } from "viem";
-import { useAccount } from "wagmi";
-import { MagnifyingGlassPlusIcon, ShareIcon, ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { MagnifyingGlassPlusIcon, ShareIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
@@ -23,17 +22,6 @@ export interface Post extends Partial<NFTMetaData> {
 
 export const PostCard = ({ post }: { post: Post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const { address: connectedAddress } = useAccount();
-  const { writeContractAsync } = useScaffoldWriteContract("BasedShop");
-
-  const { data: profileInfo } = useScaffoldReadContract({
-    contractName: "BasedProfile",
-    functionName: "profiles",
-    args: [post.user],
-    watch: true,
-  });
 
   const { data: articlePrice } = useScaffoldReadContract({
     contractName: "BasedShop",
@@ -41,10 +29,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     args: [BigInt(post.postId || 0)],
     watch: true,
   });
-
-  const defaultProfilePicture = "/guest-profile.jpg";
-
-  const profilePicture = profileInfo && profileInfo[2] ? profileInfo[2] : defaultProfilePicture;
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -73,32 +57,6 @@ export const PostCard = ({ post }: { post: Post }) => {
       } catch (error) {
         notification.error("Error copying URL to clipboard");
       }
-    }
-  };
-
-  const handleBuyArticle = async () => {
-    if (!connectedAddress) {
-      notification.error("Please connect your wallet");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const contractResponse = await writeContractAsync({
-        functionName: "buyArticle",
-        args: [BigInt(post.postId || 0)],
-        value: articlePrice,
-      });
-
-      if (contractResponse) {
-        notification.success("Posted successfully!");
-      }
-    } catch (error) {
-      console.error("Error during posting:", error);
-      notification.error("Posting failed, please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -46,7 +46,7 @@ const BoughtArticles: NextPage = () => {
   const {
     data: boughtEvents,
     // isLoading: createIsLoadingEvents,
-    error: boughtErrorReadingEvents,
+    // error: boughtErrorReadingEvents,
   } = useScaffoldEventHistory({
     contractName: "BasedShop",
     eventName: "ArticleBought",
