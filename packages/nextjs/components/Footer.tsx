@@ -4,15 +4,8 @@ import { usePathname } from "next/navigation";
 import Create from "../app/create/Create";
 import Modal from "../app/create/Modal";
 import { useAccount } from "wagmi";
-import { HeartIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import {
-  BellIcon,
-  EnvelopeIcon,
-  HomeIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-  ShoppingCartIcon,
-} from "@heroicons/react/24/solid";
+import { HeartIcon } from "@heroicons/react/24/outline";
+import { BellIcon, HomeIcon, MagnifyingGlassIcon, PlusIcon, ShoppingCartIcon } from "@heroicons/react/24/solid";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 export const Footer = () => {
