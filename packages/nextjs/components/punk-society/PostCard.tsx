@@ -4,19 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import BookmarkButton from "./BookmarkButton";
-// import CommentSection from "./CommentSection";
-// import LikeButton from "./LikedButton";
-// import { ProfileAddress } from "./ProfileAddress";
-import {
-  // BookmarkIcon,
-  // ChatBubbleLeftIcon,
-  MagnifyingGlassPlusIcon,
-  ShareIcon,
-  ShoppingCartIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-// import { ChatBubbleLeftIcon as ChatBubbleLeftSolidIcon } from "@heroicons/react/24/solid";
-import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
+import { formatEther, parseEther } from "viem";
+import { useAccount } from "wagmi";
+import { MagnifyingGlassPlusIcon, ShareIcon, ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
@@ -25,17 +16,36 @@ export interface Post extends Partial<NFTMetaData> {
   postId?: number;
   uri: string;
   user: string;
+  price: string;
+  amount: string;
   date?: string;
 }
 
 export const PostCard = ({ post }: { post: Post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [showCommentSection, setShowCommentSection] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const { address: connectedAddress } = useAccount();
+  const { writeContractAsync } = useScaffoldWriteContract("BasedShop");
 
   const { data: profileInfo } = useScaffoldReadContract({
     contractName: "BasedProfile",
     functionName: "profiles",
     args: [post.user],
+    watch: true,
+  });
+
+  const { data: articlePrice } = useScaffoldReadContract({
+    contractName: "BasedShop",
+    functionName: "articlePrices",
+    args: [BigInt(post.postId || 0)],
+    watch: true,
+  });
+
+  const { data: articleAmount } = useScaffoldReadContract({
+    contractName: "BasedShop",
+    functionName: "articleAmounts",
+    args: [BigInt(post.postId || 0)],
     watch: true,
   });
 
@@ -50,10 +60,6 @@ export const PostCard = ({ post }: { post: Post }) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  // const toggleCommentSection = () => {
-  //   setShowCommentSection(!showCommentSection);
-  // };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -74,6 +80,32 @@ export const PostCard = ({ post }: { post: Post }) => {
       } catch (error) {
         notification.error("Error copying URL to clipboard");
       }
+    }
+  };
+
+  const handleBuyArticle = async () => {
+    if (!connectedAddress) {
+      notification.error("Please connect your wallet");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const contractResponse = await writeContractAsync({
+        functionName: "buyArticle",
+        args: [BigInt(post.postId || 0)],
+        value: articlePrice,
+      });
+
+      if (contractResponse) {
+        notification.success("Posted successfully!");
+      }
+    } catch (error) {
+      console.error("Error during posting:", error);
+      notification.error("Posting failed, please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,7 +156,10 @@ export const PostCard = ({ post }: { post: Post }) => {
             </div>
           )}
           <div className="flex flex-col justify-center w-2/3 pl-4">
-            <p className="my-0 text-lg">{post.description ?? "No description available."}</p>
+            <span className="my-0 text-lg">{post.description ?? "No description available."}</span>
+            <span className="text-md italic">
+              On stock: <span className="font-bold">{articleAmount?.toString()}</span> units
+            </span>
           </div>
         </div>
 
@@ -139,24 +174,28 @@ export const PostCard = ({ post }: { post: Post }) => {
               <BookmarkButton postId={BigInt(post.postId || 0)} />
             </div>
 
-            {/* <div className="flex items-center gap-3">
-              <LikeButton postId={BigInt(post.postId || 0)} />
-              <button onClick={toggleCommentSection} className="icon-button">
-                {showCommentSection ? (
-                  <ChatBubbleLeftSolidIcon className="comment-icon text-blue-600" />
-                ) : (
-                  <ChatBubbleLeftIcon className="comment-icon" />
-                )}
-              </button>
-            </div> */}
             <div className="flex items-center gap-3">
-              <button className="px-4 py-2 rounded-lg bg-red-600 text-white">Buy</button>
+              {articlePrice !== null && (
+                <div className="flex items-center">
+                  <span className="text-lg font-semibold">
+                    {articlePrice !== undefined ? formatEther(articlePrice) : "N/A"}
+                  </span>
+                  <Image src="/ethereumlogo.svg" alt="ETH Logo" width={20} height={20} className="ml-2" />
+                </div>
+              )}
+              <button
+                disabled={loading}
+                onClick={handleBuyArticle}
+                className="px-4 py-2 rounded-lg bg-green-600 text-white"
+              >
+                Buy
+              </button>
+
               <button className="p-2 rounded-full bg-red-600 text-white">
                 <ShoppingCartIcon className="h-5 w-5" />
               </button>
             </div>
           </div>
-          {/* {showCommentSection && <CommentSection postId={BigInt(post.postId || 0)} />} */}
         </div>
 
         {/* Modal for fullscreen image */}

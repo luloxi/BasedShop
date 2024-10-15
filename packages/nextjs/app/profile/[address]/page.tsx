@@ -14,8 +14,12 @@ import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
 export interface Post extends Partial<NFTMetaData> {
   listingId?: number;
+  nftAddress?: string;
+  postId?: number;
   uri: string;
   user: string;
+  price: string;
+  amount: string;
   date?: string;
 }
 
@@ -65,6 +69,8 @@ const ProfilePage: NextPage = () => {
             const user = args?.user;
             const tokenURI = args?.tokenURI;
             const date = args?.date;
+            const price = args?.price;
+            const amount = args?.amount;
 
             if (args?.user !== address) continue;
             if (!tokenURI) continue;
@@ -84,6 +90,8 @@ const ProfilePage: NextPage = () => {
               uri: tokenURI,
               user: user || "",
               date: date?.toString() || "",
+              price: price?.toString() || "",
+              amount: amount?.toString() || "",
               ...nftMetadata,
             });
           } catch (e) {

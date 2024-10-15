@@ -9,10 +9,12 @@ import { getMetadataFromIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
 export interface Post extends Partial<NFTMetaData> {
+  nftAddress?: string;
   postId?: number;
   uri: string;
   user: string;
-
+  price: string;
+  amount: string;
   date?: string;
 }
 
@@ -58,6 +60,8 @@ export const Explore = () => {
             const user = event.args?.user;
             const tokenURI = event.args?.tokenURI;
             const date = event.args?.date;
+            const price = event.args?.price;
+            const amount = event.args?.amount;
 
             if (!tokenURI) continue;
 
@@ -68,6 +72,8 @@ export const Explore = () => {
               postId: parseInt(event.args?.articleId?.toString() ?? "0"),
               uri: tokenURI,
               user: user || "",
+              price: price?.toString() || "",
+              amount: amount?.toString() || "",
               date: date?.toString() || "",
               ...nftMetadata,
             });
