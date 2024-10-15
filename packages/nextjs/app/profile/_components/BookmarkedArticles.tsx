@@ -1,14 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LoadingBars } from "../../components/punk-society/LoadingBars";
-import { NewsFeed } from "../../components/punk-society/NewsFeed";
+import { usePathname } from "next/navigation";
+import { ErrorComponent } from "../../../components/punk-society/ErrorComponent";
+import { LoadingBars } from "../../../components/punk-society/LoadingBars";
+import { NewsFeed } from "./_bookmarked/NewsFeed";
+import { NextPage } from "next";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { getMetadataFromIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
 import { NFTMetaData } from "~~/utils/simpleNFT/nftsMetadata";
 
 export interface Post extends Partial<NFTMetaData> {
+  listingId?: number;
   nftAddress?: string;
   postId?: number;
   uri: string;
@@ -18,18 +22,21 @@ export interface Post extends Partial<NFTMetaData> {
   date?: string;
 }
 
-export const Explore = () => {
+const ListerArticles: NextPage = () => {
   const [articles, setArticles] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [page, setPage] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(true);
+  const [page, setPage] = useState(1); // Start from page 1 to get the last post first
 
   const observer = useRef<IntersectionObserver | null>(null);
+
+  const pathname = usePathname();
+  const address = pathname.split("/").pop();
 
   const {
     data: createEvents,
     // isLoading: createIsLoadingEvents,
-    // error: createErrorReadingEvents,
+    error: createErrorReadingEvents,
   } = useScaffoldEventHistory({
     contractName: "BasedShop",
     eventName: "ArticleCreated",
@@ -52,24 +59,33 @@ export const Explore = () => {
 
         for (const event of eventsToFetch) {
           try {
-            const user = event.args?.user;
-            const tokenURI = event.args?.tokenURI;
-            const date = event.args?.date;
-            const price = event.args?.price;
-            const amount = event.args?.amount;
+            const { args } = event;
+            const user = args?.user;
+            const tokenURI = args?.tokenURI;
+            const date = args?.date;
+            const price = args?.price;
+            const amount = args?.amount;
 
+            if (args?.user !== address) continue;
             if (!tokenURI) continue;
 
             const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
             const nftMetadata: NFTMetaData = await getMetadataFromIPFS(ipfsHash);
 
+            // Temporary fix for V1
+            // Check if the image attribute is valid and does not point to [object Object]
+            if (nftMetadata.image === "https://ipfs.io/ipfs/[object Object]") {
+              console.warn(`Skipping post with invalid image URL: ${nftMetadata.image}`);
+              continue;
+            }
+
             articlesUpdate.push({
               postId: parseInt(event.args?.articleId?.toString() ?? "0"),
               uri: tokenURI,
               user: user || "",
+              date: date?.toString() || "",
               price: price?.toString() || "",
               amount: amount?.toString() || "",
-              date: date?.toString() || "",
               ...nftMetadata,
             });
           } catch (e) {
@@ -85,7 +101,7 @@ export const Explore = () => {
         setLoadingMore(false);
       }
     },
-    [createEvents],
+    [createEvents, address],
   );
 
   useEffect(() => {
@@ -94,7 +110,7 @@ export const Explore = () => {
   }, [page, fetchArticles]);
 
   const lastPostElementRef = useCallback(
-    (node: HTMLDivElement | null) => {
+    (node: any) => {
       if (loadingMore) return;
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver(entries => {
@@ -107,19 +123,30 @@ export const Explore = () => {
     [loadingMore],
   );
 
-  if (loading && page === 0) {
-    return (
-      <>
-        <LoadingBars />
-      </>
-    );
+  // Ensure the address is available before rendering the component
+  if (!address) {
+    return <p>Inexistent address, try again...</p>;
+  }
+
+  if (createErrorReadingEvents) {
+    return <ErrorComponent message={createErrorReadingEvents?.message || "Error loading events"} />;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <NewsFeed articles={articles} />
-      <div ref={lastPostElementRef}></div>
-      {loadingMore && <LoadingBars />}
-    </div>
+    <>
+      <div className="flex flex-col items-center justify-center">
+        {loading && page === 1 ? (
+          <LoadingBars />
+        ) : articles.length === 0 ? (
+          <p>This user has no articles</p>
+        ) : (
+          <NewsFeed articles={articles} />
+        )}
+        <div ref={lastPostElementRef}></div>
+        {page !== 1 && loadingMore && <LoadingBars />}
+      </div>
+    </>
   );
 };
+
+export default ListerArticles;

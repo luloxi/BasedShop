@@ -32,6 +32,7 @@ contract BasedShop {
     uint256 price,
     uint256 date
   );
+
   event ArticlePriceUpdated(
     uint256 indexed articleId, uint256 oldPrice, uint256 newPrice
   );
@@ -40,12 +41,7 @@ contract BasedShop {
     uint256 indexed articleId, uint256 oldAmount, uint256 newAmount
   );
   event ArticleDeleted(uint256 indexed articleId, uint256 date);
-  event ArticleLiked(
-    uint256 indexed articleID, address indexed user, uint256 date
-  );
-  event ArticleUnliked(
-    uint256 indexed articleID, address indexed user, uint256 date
-  );
+
   event ArticleCommented(
     uint256 indexed articleID,
     address indexed user,
@@ -87,11 +83,6 @@ contract BasedShop {
   mapping(uint256 => uint256) public articlePrices;
   mapping(uint256 => uint256) public articleAmounts;
   mapping(uint256 => mapping(address => bool)) public articleBuyers;
-
-  // Likes
-  mapping(uint256 article => uint256 likes) public articleToLikes;
-  mapping(address user => mapping(uint256 article => bool liked)) public
-    userToArticleLikes;
 
   // Comments
   mapping(uint256 articleId => Comment[]) public articleToComments;
@@ -207,36 +198,6 @@ contract BasedShop {
     delete articleIdToUser[_articleId];
 
     emit ArticleDeleted(_articleId, block.timestamp);
-  }
-
-  function likeArticle(
-    uint256 _articleId
-  ) public {
-    require(
-      articleBuyers[_articleId][msg.sender],
-      "You must buy the article to like it"
-    );
-    _requireArticleExists(_articleId);
-    require(
-      !userToArticleLikes[msg.sender][_articleId],
-      "You have already liked this article"
-    );
-    userToArticleLikes[msg.sender][_articleId] = true;
-    articleToLikes[_articleId]++;
-    emit ArticleLiked(_articleId, msg.sender, block.timestamp);
-  }
-
-  function unlikeArticle(
-    uint256 _articleId
-  ) public {
-    _requireArticleExists(_articleId);
-    require(
-      userToArticleLikes[msg.sender][_articleId],
-      "You have not liked this article yet"
-    );
-    userToArticleLikes[msg.sender][_articleId] = false;
-    articleToLikes[_articleId]--;
-    emit ArticleUnliked(_articleId, msg.sender, block.timestamp);
   }
 
   function commentOnArticle(uint256 _articleId, string memory _text) public {

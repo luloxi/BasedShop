@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import BookmarkButton from "./BookmarkButton";
+import BookmarkButton from "../../../../components/punk-society/BookmarkButton";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { MagnifyingGlassPlusIcon, ShareIcon, ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -46,6 +46,13 @@ export const PostCard = ({ post }: { post: Post }) => {
     contractName: "BasedShop",
     functionName: "articleAmounts",
     args: [BigInt(post.postId || 0)],
+    watch: true,
+  });
+
+  const { data: bookmarked } = useScaffoldReadContract({
+    contractName: "BasedShop",
+    functionName: "userToArticleBookmark",
+    args: [connectedAddress, BigInt(post.postId || 0)],
     watch: true,
   });
 
@@ -114,6 +121,8 @@ export const PostCard = ({ post }: { post: Post }) => {
     return date.toLocaleDateString(); // Format the date as needed
   };
 
+  if (!bookmarked) return null;
+
   return (
     <div className="flex justify-center items-center">
       <div className={`card-compact bg-base-300 w-[100%] relative group rounded-lg`}>
@@ -157,8 +166,8 @@ export const PostCard = ({ post }: { post: Post }) => {
           )}
           <div className="flex flex-col justify-center w-2/3 pl-4">
             <span className="my-0 text-lg">{post.description ?? "No description available."}</span>
-            <span className="mt-2 text-md italic">
-              {articleAmount && Number(articleAmount) === 0 ? (
+            <span className="text-md italic">
+              {articleAmount && parseInt(articleAmount.toString(), 10) === 0 ? (
                 <span className="text-red-600">Out of stock</span>
               ) : (
                 <>

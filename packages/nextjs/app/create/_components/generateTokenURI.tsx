@@ -1,10 +1,9 @@
-const generateTokenURI = (name: string, description: string, image: string, externalUrl: string) => {
+const generateTokenURI = (name: string, description: string, image: string) => {
   // Base metadata object
   const metadata: any = {
     name,
     description,
     image,
-    external_url: externalUrl,
   };
 
   // Convert the metadata object to a JSON string

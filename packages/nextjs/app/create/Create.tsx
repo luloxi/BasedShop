@@ -12,10 +12,8 @@ import { InputBase } from "~~/components/scaffold-eth";
 const Create = ({ onClose }: { onClose: any }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [externalUrl, setExternalUrl] = useState("");
   const [price, setPrice] = useState("");
   const [amount, setAmount] = useState("");
-  const [urlError, setUrlError] = useState("");
   const [yourJSON, setYourJSON] = useState<object>({});
   const [uploadedImageIpfsPath, setUploadedImageIpfsPath] = useState(""); // NEW: For image IPFS path
 
@@ -31,29 +29,15 @@ const Create = ({ onClose }: { onClose: any }) => {
     window.location.reload();
   };
 
-  const validateUrl = (url: string) => {
-    const pattern = /^(https?:\/\/)/;
-    return pattern.test(url);
-  };
-
-  const handleUrlChange = (url: string) => {
-    setExternalUrl(url);
-    if (!validateUrl(url)) {
-      setUrlError("URL must start with http:// or https://");
-    } else {
-      setUrlError("");
-    }
-  };
-
   useEffect(() => {
     const generateTokenURIString = () => {
       const fullImageUrl = `https://ipfs.io/ipfs/${uploadedImageIpfsPath}`;
-      const tokenURI = generateTokenURI(name, description, fullImageUrl, externalUrl);
+      const tokenURI = generateTokenURI(name, description, fullImageUrl);
       setYourJSON(JSON.parse(atob(tokenURI.split(",")[1])));
     };
 
     generateTokenURIString();
-  }, [name, externalUrl, description, uploadedImageIpfsPath]);
+  }, [name, description, uploadedImageIpfsPath]);
 
   return (
     <>
@@ -75,8 +59,6 @@ const Create = ({ onClose }: { onClose: any }) => {
             <div className="flex flex-col gap-3 text-left flex-shrink-0  w-full">
               <InputBase placeholder="Article name" value={name} onChange={setName} />
               <TextInput description={description} setDescription={setDescription} />
-              <InputBase placeholder="URL for your article (https://)" value={externalUrl} onChange={handleUrlChange} />
-              {externalUrl && urlError && <span className="text-red-500 text-sm">{urlError}</span>}
               <div className="flex flex-row gap-3">
                 <div className="w-1/2">
                   <InputBase placeholder="Price in ETH" value={price} onChange={setPrice} />

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import BookmarkButton from "./BookmarkButton";
+import BookmarkButton from "../../../../components/punk-society/BookmarkButton";
+import { ProfileAddress } from "../../../../components/punk-society/ProfileAddress";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { MagnifyingGlassPlusIcon, ShareIcon, ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -38,13 +38,6 @@ export const PostCard = ({ post }: { post: Post }) => {
   const { data: articlePrice } = useScaffoldReadContract({
     contractName: "BasedShop",
     functionName: "articlePrices",
-    args: [BigInt(post.postId || 0)],
-    watch: true,
-  });
-
-  const { data: articleAmount } = useScaffoldReadContract({
-    contractName: "BasedShop",
-    functionName: "articleAmounts",
     args: [BigInt(post.postId || 0)],
     watch: true,
   });
@@ -121,16 +114,6 @@ export const PostCard = ({ post }: { post: Post }) => {
           <h2 className="text-xl font-bold">{post.name}</h2>
           <div className="flex flex-row justify-center items-center gap-3">
             <p className="my-0 text-sm">{post.date ? formatDate(Number(post.date)) : "No date available"}</p>
-            <Link href={`/profile/${post.user}`} passHref>
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
-                style={{
-                  backgroundImage: `url(${profilePicture})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-            </Link>
           </div>
         </div>
         <div className="flex flex-row items-center mx-2">
@@ -157,14 +140,8 @@ export const PostCard = ({ post }: { post: Post }) => {
           )}
           <div className="flex flex-col justify-center w-2/3 pl-4">
             <span className="my-0 text-lg">{post.description ?? "No description available."}</span>
-            <span className="mt-2 text-md italic">
-              {articleAmount && Number(articleAmount) === 0 ? (
-                <span className="text-red-600">Out of stock</span>
-              ) : (
-                <>
-                  <span className="text-green-600 font-bold">On stock: {articleAmount?.toString()} units</span>
-                </>
-              )}
+            <span className="mt-2 flex flex-row items-center justify-start gap-3 text-lg italic">
+              Contact seller: <ProfileAddress address={post.user} />
             </span>
           </div>
         </div>
@@ -189,17 +166,6 @@ export const PostCard = ({ post }: { post: Post }) => {
                   <Image src="/ethereumlogo.svg" alt="ETH Logo" width={20} height={20} className="ml-2" />
                 </div>
               )}
-              <button
-                disabled={loading}
-                onClick={handleBuyArticle}
-                className="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white"
-              >
-                Buy
-              </button>
-
-              <button className="p-2 rounded-full bg-red-600 text-white">
-                <ShoppingCartIcon className="h-5 w-5" />
-              </button>
             </div>
           </div>
         </div>
