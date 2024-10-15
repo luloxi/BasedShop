@@ -142,7 +142,7 @@ export const PostCard = ({ post }: { post: Post }) => {
                   src={post.image || "/path/to/default/image.png"}
                   alt="NFT Image"
                   className="w-full h-auto rounded-lg object-cover"
-                  layout="responsive"
+                  // layout="responsive"
                   width={800} // Adjust this to the desired fullscreen width
                   height={800} // Adjust this to maintain the aspect ratio of the image
                 />
