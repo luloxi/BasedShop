@@ -1,8 +1,9 @@
 import { ChangeEvent, FocusEvent, ReactNode, useCallback, useEffect, useRef } from "react";
 
 interface TextInputProps {
-  description: string;
-  setDescription: (desc: string) => void;
+  content: string;
+  setContent: (desc: string) => void;
+  placeholder?: string;
   error?: boolean;
   prefix?: ReactNode;
   suffix?: ReactNode;
@@ -10,8 +11,9 @@ interface TextInputProps {
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
-  description,
-  setDescription,
+  content,
+  setContent,
+  placeholder,
   error,
   prefix,
   suffix,
@@ -26,9 +28,9 @@ export const TextInput: React.FC<TextInputProps> = ({
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setDescription(e.target.value);
+      setContent(e.target.value);
     },
-    [setDescription],
+    [setContent],
   );
 
   const onFocus = (e: FocusEvent<HTMLTextAreaElement, Element>) => {
@@ -47,9 +49,9 @@ export const TextInput: React.FC<TextInputProps> = ({
         {prefix}
         <textarea
           className="textarea text-lg textarea-ghost border-base-300 focus:border-green-600 border-2 rounded-lg focus:outline-none focus:bg-transparent focus:text-gray-400 h-auto min-h-[3rem] px-4 w-full font-medium placeholder:text-accent/50 text-green-500 resize-none"
-          placeholder="Describe your article"
+          placeholder={placeholder}
           name="description"
-          value={description}
+          value={content}
           onChange={handleChange}
           autoComplete="off"
           ref={textAreaRef}

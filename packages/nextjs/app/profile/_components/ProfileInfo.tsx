@@ -3,8 +3,10 @@ import ProfilePictureUpload from "./ProfilePictureUpload";
 import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import { useAccount } from "wagmi";
 import { PencilIcon } from "@heroicons/react/24/outline";
+import { InputBase } from "~~/components/punk-society/InputBase";
 import { LoadingBars } from "~~/components/punk-society/LoadingBars";
-import { Address, InputBase, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { TextInput } from "~~/components/punk-society/TextInput";
+import { Address, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
@@ -105,7 +107,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
           {/* User Info Section */}
           <div className="flex flex-col justify-center items-center">
             {isEditing ? (
-              <InputBase placeholder="Your Name" value={username} onChange={setUsername} />
+              ""
             ) : (
               <>
                 <h2 className="text-2xl font-bold">{username || "Guest user"}</h2>
@@ -142,9 +144,11 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
           <div></div>
           {/* User Bio */}
           {isEditing ? (
-            <div className="flex-grow text-center md:mx-auto mt-4 md:mt-0">
+            <div className="flex flex-col justify-center items-center flex-grow text-center gap-3 md:mx-auto mt-4 md:mt-0">
               <>
-                <InputBase placeholder="Your Bio" value={bio} onChange={setBio} />
+                <InputBase placeholder="Your Name" value={username} onChange={setUsername} />
+                <TextInput placeholder="Your Bio" content={bio} setContent={setBio} />
+                {/* <InputBase placeholder="Your Bio" value={bio} onChange={setBio} /> */}
                 <InputBase placeholder="Your Email" value={email} onChange={setEmail} />
               </>
             </div>

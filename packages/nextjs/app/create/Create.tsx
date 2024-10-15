@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { ImageUploader } from "./_components/ImageUploader";
 import { MintingButtons } from "./_components/MintingButtons";
-import { TextInput } from "./_components/TextInput";
 import generateTokenURI from "./_components/generateTokenURI";
-import { InputBase } from "~~/components/scaffold-eth";
+import { InputBase } from "~~/components/punk-society/InputBase";
+import { TextInput } from "~~/components/punk-society/TextInput";
 
 // import type { NextPage } from "next";
 
@@ -58,7 +58,7 @@ const Create = ({ onClose }: { onClose: any }) => {
             </div>
             <div className="flex flex-col gap-3 text-left flex-shrink-0  w-full">
               <InputBase placeholder="Article name" value={name} onChange={setName} />
-              <TextInput description={description} setDescription={setDescription} />
+              <TextInput placeholder="Describe your article" content={description} setContent={setDescription} />
               <div className="flex flex-row gap-3">
                 <div className="w-1/2">
                   <InputBase placeholder="Price in ETH" value={price} onChange={setPrice} />
