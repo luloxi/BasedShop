@@ -87,22 +87,24 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
         >
           <NetworkOptions hidden={!selectingNetwork} />
           <li className={selectingNetwork ? "hidden" : ""}>
-            <div className="btn-sm !rounded-xl flex gap-3 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-500">
-              <UserIcon className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0" aria-hidden="true" />
-              {/* <Link href={blockExplorerAddressLink} rel="noopener noreferrer" className="whitespace-nowrap"> */}
-              <Link href={`/profile/${connectedAddress}`} passHref>
-                Go to Profile
-              </Link>
-            </div>
+            <Link className="p-0 flex items-center justify-center" href={`/profile/${connectedAddress}`} passHref>
+              <div className="btn-sm w-full !rounded-xl flex items-center justify-start gap-2 py-3 text-white bg-orange-600 hover:bg-orange-500 active:bg-orange-500">
+                <UserIcon className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0" aria-hidden="true" />
+                {/* <Link href={blockExplorerAddressLink} rel="noopener noreferrer" className="whitespace-nowrap"> */}
+                <Link href={`/profile/${connectedAddress}`} passHref>
+                  Go to Profile
+                </Link>
+              </div>
+            </Link>
           </li>
           <FundButton
             text="Add funds"
             fundingUrl={onrampBuyUrl}
-            className="py-1 px-3.5 gap-1 text-md rounded-xl justify-start font-normal"
+            className="py-1 px-3.5 gap-1 text-md rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] justify-start font-normal "
           />
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
-              className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
+              className="menu-item btn-sm !rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] flex gap-3 py-3"
               type="button"
               onClick={() => openPopupWindow("https://wallet.coinbase.com/es-ES/receive")}
             >
@@ -112,7 +114,7 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
-              className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
+              className="menu-item btn-sm !rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] flex gap-3 py-3"
               type="button"
               onClick={() => openPopupWindow("https://wallet.coinbase.com/es-ES/send")}
             >
@@ -122,7 +124,7 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
           </li>
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
-              className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
+              className="menu-item btn-sm !rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] flex gap-3 py-3"
               type="button"
               onClick={() => openPopupWindow("https://wallet.coinbase.com/es-ES/swap")}
             >
