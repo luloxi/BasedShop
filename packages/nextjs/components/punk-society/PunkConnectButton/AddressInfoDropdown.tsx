@@ -100,7 +100,7 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
           <FundButton
             text="Add funds"
             fundingUrl={onrampBuyUrl}
-            className="py-1 px-3.5 gap-1 text-md rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] justify-start font-normal "
+            className="py-1 px-6 md:px-3.5 gap-0.5 md:gap-1 text-md rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] justify-start font-normal "
           />
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
