@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { NetworkOptions } from "./NetworkOptions";
-import { FundButton } from "@coinbase/onchainkit/fund";
+import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import { Avatar, Badge, Identity, Name } from "@coinbase/onchainkit/identity";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getAddress } from "viem";
@@ -37,7 +37,18 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
   const [addressCopied, setAddressCopied] = useState(false);
 
   const [selectingNetwork, setSelectingNetwork] = useState(false);
+
   const dropdownRef = useRef<HTMLDetailsElement>(null);
+
+  const projectId = process.env.NEXT_PUBLIC_CDP_PROJECT_ID || "";
+
+  const onrampBuyUrl = getOnrampBuyUrl({
+    projectId,
+    addresses: { connectedAddress: ["base"] },
+    assets: ["USDC", "ETH"],
+    presetFiatAmount: 20,
+    fiatCurrency: "USD",
+  });
   const closeDropdown = () => {
     setSelectingNetwork(false);
     dropdownRef.current?.removeAttribute("open");
@@ -84,7 +95,11 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
               </Link>
             </div>
           </li>
-          <FundButton text="Add funds" className="py-1 px-3.5 gap-1 text-md rounded-xl justify-start font-normal" />
+          <FundButton
+            text="Add funds"
+            fundingUrl={onrampBuyUrl}
+            className="py-1 px-3.5 gap-1 text-md rounded-xl justify-start font-normal"
+          />
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
               className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
