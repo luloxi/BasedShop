@@ -1,20 +1,21 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { NetworkOptions } from "./NetworkOptions";
+import { FundButton } from "@coinbase/onchainkit/fund";
 import { Avatar, Badge, Identity, Name } from "@coinbase/onchainkit/identity";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getAddress } from "viem";
 import { Address } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
 import {
+  ArrowDownLeftIcon,
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
+  ArrowUpRightIcon,
   ArrowsRightLeftIcon,
   CheckCircleIcon,
   DocumentDuplicateIcon,
-  QrCodeIcon,
   UserIcon,
-  WalletIcon,
 } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
@@ -43,6 +44,10 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
   };
   useOutsideClick(dropdownRef, closeDropdown);
 
+  const openPopupWindow = (url: string | URL | undefined) => {
+    window.open(url, "popup", "width=800,height=600");
+  };
+
   return (
     <>
       <details ref={dropdownRef} className="dropdown dropdown-end leading-3">
@@ -50,7 +55,10 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
           tabIndex={0}
           className="btn btn-secondary bg-base-200 btn-sm pl-0 pr-2 shadow-md dropdown-toggle gap-0 !h-auto"
         > */}
-        <summary tabIndex={0} className="btn btn-secondary bg-base-300 btn-sm shadow-md dropdown-toggle gap-0 !h-auto">
+        <summary
+          tabIndex={0}
+          className="btn btn-secondary bg-base-300 hover:bg-base-300 btn-sm shadow-md dropdown-toggle gap-0 !h-auto"
+        >
           <Identity
             className="rounded-lg bg-base-300 p-0 "
             address={address}
@@ -68,7 +76,7 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
         >
           <NetworkOptions hidden={!selectingNetwork} />
           <li className={selectingNetwork ? "hidden" : ""}>
-            <div className="btn-sm !rounded-xl flex gap-3 py-3">
+            <div className="btn-sm !rounded-xl flex gap-3 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-500">
               <UserIcon className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0" aria-hidden="true" />
               {/* <Link href={blockExplorerAddressLink} rel="noopener noreferrer" className="whitespace-nowrap"> */}
               <Link href={`/profile/${connectedAddress}`} passHref>
@@ -76,19 +84,38 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
               </Link>
             </div>
           </li>
+          <FundButton text="Add funds" className="py-1 px-3.5 gap-1 text-md rounded-xl justify-start font-normal" />
           <li className={selectingNetwork ? "hidden" : ""}>
-            <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
-              <WalletIcon className="h-6 w-4 ml-2 sm:ml-0" />
-              <a
-                target="_blank"
-                href="https://wallet.coinbase.com"
-                rel="noopener noreferrer"
-                className="whitespace-nowrap"
-              >
-                Go to Wallet Dashboard
-              </a>
+            <button
+              className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
+              type="button"
+              onClick={() => openPopupWindow("https://wallet.coinbase.com/es-ES/receive")}
+            >
+              <ArrowDownLeftIcon className="h-6 w-4 ml-2 sm:ml-0 text-white" />
+              <span className="text-white">Receive funds</span>
             </button>
           </li>
+          <li className={selectingNetwork ? "hidden" : ""}>
+            <button
+              className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
+              type="button"
+              onClick={() => openPopupWindow("https://wallet.coinbase.com/es-ES/send")}
+            >
+              <ArrowUpRightIcon className="h-6 w-4 ml-2 sm:ml-0 text-white" />
+              <span className="text-white">Send funds</span>
+            </button>
+          </li>
+          <li className={selectingNetwork ? "hidden" : ""}>
+            <button
+              className="menu-item btn-sm !rounded-xl bg-[#4f46e5] hover:bg-[#4338CA] active:bg-[#4338CA] flex gap-3 py-3"
+              type="button"
+              onClick={() => openPopupWindow("https://wallet.coinbase.com/es-ES/swap")}
+            >
+              <ArrowsRightLeftIcon className="h-6 w-4 ml-2 sm:ml-0 text-white" />
+              <span className="text-white">Convert funds</span>
+            </button>
+          </li>
+
           <li className={selectingNetwork ? "hidden" : ""}>
             {addressCopied ? (
               <div className="btn-sm !rounded-xl flex gap-3 py-3">
@@ -117,13 +144,6 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
                 </div>
               </CopyToClipboard>
             )}
-          </li>
-
-          <li className={selectingNetwork ? "hidden" : ""}>
-            <label htmlFor="qrcode-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
-              <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
-              <span className="whitespace-nowrap">View QR Code</span>
-            </label>
           </li>
 
           <li className={selectingNetwork ? "hidden" : ""}>

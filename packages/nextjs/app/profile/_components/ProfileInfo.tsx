@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import { Avatar, Badge, Identity, Name } from "@coinbase/onchainkit/identity";
 import { useAccount } from "wagmi";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { InputBase } from "~~/components/punk-society/InputBase";
 import { LoadingBars } from "~~/components/punk-society/LoadingBars";
-import { PunkBalance } from "~~/components/punk-society/PunkBalance";
-import { PunkConnectButton } from "~~/components/punk-society/PunkConnectButton";
 import { TextInput } from "~~/components/punk-society/TextInput";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -24,17 +21,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
   const [isEditing, setIsEditing] = useState(false); // New state for edit mode
   const [loadingProfile, setLoadingProfile] = useState(true);
 
-  const projectId = process.env.NEXT_PUBLIC_CDP_PROJECT_ID ? process.env.NEXT_PUBLIC_CDP_PROJECT_ID : "";
   const { address: connectedAddress } = useAccount();
-
-  const onrampBuyUrl = getOnrampBuyUrl({
-    projectId,
-    addresses: connectedAddress ? { [connectedAddress]: ["base"] } : {},
-    // assets: ["ETH", "USDC"],
-    assets: ["ETH"],
-    // presetFiatAmount: 20,
-    // fiatCurrency: "USD",
-  });
 
   const { data: punkProfile } = useScaffoldReadContract({
     contractName: "BasedProfile",
@@ -124,16 +111,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ address }) => {
                 {bio && <p className="text-base-content">{bio}</p>}
                 <div className="mt-2">
                   {address === connectedAddress ? (
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-                      <div>
-                        <PunkBalance address={connectedAddress} />
-
-                        <PunkConnectButton />
-                      </div>
-                      <div className="bg-base-200 rounded-lg">
-                        <FundButton fundingUrl={onrampBuyUrl} />
-                      </div>
-                    </div>
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-3"></div>
                   ) : (
                     <div className="text-base-content">
                       <Address address={address} />
