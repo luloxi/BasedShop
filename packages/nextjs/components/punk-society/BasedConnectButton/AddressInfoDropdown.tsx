@@ -1,20 +1,16 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
+import { PunkBalance } from "../PunkBalance";
 import { NetworkOptions } from "./NetworkOptions";
 import { FundButton, getOnrampBuyUrl } from "@coinbase/onchainkit/fund";
 import { Avatar, Badge, Identity, Name } from "@coinbase/onchainkit/identity";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { getAddress } from "viem";
 import { Address } from "viem";
 import { useAccount, useDisconnect } from "wagmi";
 import {
   ArrowDownLeftIcon,
   ArrowLeftOnRectangleIcon,
-  ArrowTopRightOnSquareIcon,
   ArrowUpRightIcon,
   ArrowsRightLeftIcon,
-  CheckCircleIcon,
-  DocumentDuplicateIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -29,12 +25,9 @@ type AddressInfoDropdownProps = {
   ensAvatar?: string;
 };
 
-export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: AddressInfoDropdownProps) => {
+export const AddressInfoDropdown = ({ address }: AddressInfoDropdownProps) => {
   const { disconnect } = useDisconnect();
   const { address: connectedAddress } = useAccount();
-  const checkSumAddress = getAddress(address);
-
-  const [addressCopied, setAddressCopied] = useState(false);
 
   const [selectingNetwork, setSelectingNetwork] = useState(false);
 
@@ -86,6 +79,9 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
           className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
         >
           <NetworkOptions hidden={!selectingNetwork} />
+          <div className={selectingNetwork ? "hidden" : ""}>
+            <PunkBalance address={connectedAddress} />
+          </div>
           <li className={selectingNetwork ? "hidden" : ""}>
             <Link className="p-0 flex items-center justify-center" href={`/profile/${connectedAddress}`} passHref>
               <div className="btn-sm w-full !rounded-xl flex items-center justify-start gap-2 py-3 text-white bg-orange-600 hover:bg-orange-500 active:bg-orange-500">
@@ -97,10 +93,15 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
               </div>
             </Link>
           </li>
+
           <FundButton
             text="Add funds"
             fundingUrl={onrampBuyUrl}
-            className="py-1 px-6 md:px-3.5 gap-0.5 md:gap-1 text-md rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] justify-start font-normal "
+            className={
+              selectingNetwork
+                ? "hidden"
+                : "py-1 px-6 md:px-3.5 gap-0.5 md:gap-1 text-md rounded-xl bg-[#4338CA] hover:bg-[#4f46e5] active:bg-[#4f46e5] justify-start font-normal "
+            }
           />
           <li className={selectingNetwork ? "hidden" : ""}>
             <button
@@ -133,49 +134,6 @@ export const AddressInfoDropdown = ({ address, blockExplorerAddressLink }: Addre
             </button>
           </li>
 
-          <li className={selectingNetwork ? "hidden" : ""}>
-            {addressCopied ? (
-              <div className="btn-sm !rounded-xl flex gap-3 py-3">
-                <CheckCircleIcon
-                  className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
-                  aria-hidden="true"
-                />
-                <span className=" whitespace-nowrap">Copy address</span>
-              </div>
-            ) : (
-              <CopyToClipboard
-                text={checkSumAddress}
-                onCopy={() => {
-                  setAddressCopied(true);
-                  setTimeout(() => {
-                    setAddressCopied(false);
-                  }, 800);
-                }}
-              >
-                <div className="btn-sm !rounded-xl flex gap-3 py-3">
-                  <DocumentDuplicateIcon
-                    className="text-xl font-normal h-6 w-4 cursor-pointer ml-2 sm:ml-0"
-                    aria-hidden="true"
-                  />
-                  <span className=" whitespace-nowrap">Copy address</span>
-                </div>
-              </CopyToClipboard>
-            )}
-          </li>
-
-          <li className={selectingNetwork ? "hidden" : ""}>
-            <button className="menu-item btn-sm !rounded-xl flex gap-3 py-3" type="button">
-              <ArrowTopRightOnSquareIcon className="h-6 w-4 ml-2 sm:ml-0" />
-              <a
-                target="_blank"
-                href={blockExplorerAddressLink}
-                rel="noopener noreferrer"
-                className="whitespace-nowrap"
-              >
-                View on Block Explorer
-              </a>
-            </button>
-          </li>
           {allowedNetworks.length > 1 ? (
             <li className={selectingNetwork ? "hidden" : ""}>
               <button

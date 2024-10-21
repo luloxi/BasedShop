@@ -4,19 +4,16 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SwitchTheme } from "./SwitchTheme";
-import { PunkBalance } from "./punk-society/PunkBalance";
-import { PunkConnectButton } from "./punk-society/PunkConnectButton";
+import { PunkConnectButton } from "./punk-society/BasedConnectButton";
+import { ConfigMenu } from "./punk-society/ConfigMenu";
 import { FaucetButton } from "./scaffold-eth";
-import { useAccount } from "wagmi";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { BellIcon, HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { BellIcon, EnvelopeIcon, HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 /**
  * Site header
  */
 export const Header = () => {
-  const { address: connectedAddress } = useAccount();
-
   const pathname = usePathname();
 
   return (
@@ -38,36 +35,48 @@ export const Header = () => {
         <div className="flex flex-row gap-3 ">
           <Link href="/" passHref>
             <button
-              className={`bg-transparent hover:bg-base-200 border-none hidden lg:flex flex-row items-center justify-center text-xl ${
+              className={`bg-transparent hover:bg-transparent border-none hidden lg:flex flex-row items-center justify-center text-xl ${
                 pathname === "/" ? "text-blue-600" : ""
               }`}
             >
               <div className="flex flex-row items-center justify-center gap-2">
-                <HomeIcon className="h-6 w-6" />
+                <HomeIcon className="h-6 w-6" /> Home
               </div>
             </button>
           </Link>
 
           <Link href="/search" passHref>
             <button
-              className={`bg-transparent hover:bg-base-200 border-none hidden lg:flex flex-row items-center justify-center text-xl ${
+              className={`bg-transparent hover:bg-bg-transparent border-none hidden lg:flex flex-row items-center justify-center text-xl ${
                 pathname === "/search" ? "text-blue-600" : ""
               }`}
             >
               <div className="flex flex-row items-center justify-center gap-2">
-                <MagnifyingGlassIcon className="h-6 w-6" />
+                <MagnifyingGlassIcon className="h-6 w-6" /> Search
               </div>
             </button>
           </Link>
 
           <Link href="/not-found" passHref>
             <button
-              className={`bg-transparent text-red-600 hover:bg-base-200 border-none hidden lg:flex flex-row items-center justify-center text-xl ${
+              className={`bg-transparent text-red-600 hover:bg-transparent border-none hidden lg:flex flex-row items-center justify-center text-xl ${
                 pathname === "/notifications" ? "text-blue-600" : ""
               }`}
             >
               <div className="flex flex-row items-center justify-center gap-2">
-                <BellIcon className="h-6 w-6" />
+                <BellIcon className="h-6 w-6" /> Notifications
+              </div>
+            </button>
+          </Link>
+
+          <Link href="/not-found" passHref>
+            <button
+              className={`bg-transparent text-red-600 hover:bg-transparent border-none hidden lg:flex flex-row items-center justify-center text-xl ${
+                pathname === "/messages" ? "text-blue-600" : ""
+              }`}
+            >
+              <div className="flex flex-row items-center justify-center gap-2">
+                <EnvelopeIcon className="h-6 w-6" /> Messages
               </div>
             </button>
           </Link>
@@ -105,9 +114,9 @@ export const Header = () => {
               </button>
             </Link>
           </div>
-          <div className="hidden md:flex">
+          {/* <div className="hidden md:flex">
             <PunkBalance address={connectedAddress} />
-          </div>
+          </div> */}
 
           <div className="flex items-center justify-center">
             <PunkConnectButton />
@@ -118,6 +127,9 @@ export const Header = () => {
           </div>
         </div>
         <div className="flex flex-row items-center justify-center gap-3">
+          <div className="">
+            <ConfigMenu />
+          </div>
           <div className="hidden lg:flex ">
             <SwitchTheme />
           </div>

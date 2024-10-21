@@ -15,6 +15,7 @@ E-commerce dApp to sell products without intermediaries 💰
 
 ## 🐣 Phase 1 (MVP)
 
+- ✅ **Integrate OnchainKit for Basenames and FundButton** (Reference: [OnchainKit](https://onchainkit.xyz/) | [OnchainKit extension for Scaffold-ETH 2](https://github.com/scaffold-eth/create-eth-extensions/tree/onchainkit))
 - ✅ **BasedArticles contract:** To register articles info
 - ✅ **BasedProfile contract:** To register users bio and email
 - ✅ **BasedShop contract:** To manage products and sales
@@ -23,11 +24,10 @@ E-commerce dApp to sell products without intermediaries 💰
 - ✅ Enable options for sharing on other platforms
 - ✅ Enable bookmarking articles
 - ✅ **Search**: By address, ENS or basename
-- ✅ **Integrate OnchainKit** (Reference: [OnchainKit](https://onchainkit.xyz/)
-- **Individual article viewer**
 
 ## 💰 Phase 2 (Shop features)
 
+- **Individual article viewer**
 - **Escrow system**: Hold funds until the buyer confirms the purchase
 - **Dashboard Insights**: Track and analyze revenue
 - **Stablecoin payment methods:** Pay with native gas or with `$USDC`. (Reference: [Easy2Pay](https://github.com/luloxi/Easy2Pay))
@@ -66,11 +66,15 @@ E-commerce dApp to sell products without intermediaries 💰
 
 ## 🛠️ Technical details
 
-⚙️ Built using Foundry, NextJS, RainbowKit, Wagmi, Viem, and Typescript,
+⚙️ Currently built using [Scaffold-ETH 2](https://scaffoldeth.io/), [Foundry](https://book.getfoundry.sh/), [OnchainKit](https://onchainkit.xyz/), [Pinata](https://pinata.cloud/), [Vercel](https://vercel.com/), [NextJS](https://nextjs.org/), [RainbowKit](https://rainbowkit.com/), [Wagmi](https://wagmi.sh/), [Viem](https://viem.sh/), and [Typescript](https://www.typescriptlang.org/).
 
-🔗 To be deployed on Base and/or EVM compatible chains
+🏦 Considering using protocols: [Circle USDC](https://www.circle.com/) as preferredd ERC20 payment method, [The Graph](https://thegraph.com/) for indexing events, [Chainlink](https://chain.link/) for price oracles, [Push Protocol](https://push.org/) for notifications and messages.
 
-📥 To see current development tasks, [see here](https://lulox.notion.site/BasedShop-11e13362a5748056b5bfe8bc5d4ff260?pvs=4)
+📜 Considering using contracts: [ERC20](https://ethereum.org/en/developers/docs/standards/tokens/erc-20/) and [ERC721](https://ethereum.org/en/developers/docs/standards/tokens/erc-721/), [Ownable](https://docs.openzeppelin.com/contracts/2.x/access-control) and [Upgradeable](https://docs.openzeppelin.com/upgrades-plugins/1.x/writing-upgradeable) from [OpenZeppelin](https://www.openzeppelin.com/) or [Solady](https://github.com/Vectorized/solady) for contract ownership. [EIP712 Signatures](https://eips.ethereum.org/EIPS/eip-712) for gasless stuff.
+
+🔗 To be deployed on Base
+
+📥 To see current development tasks, [see here](https://trello.com/b/j1HVwxL7/basedshop)
 
 ## 📚 Prerequisites
 

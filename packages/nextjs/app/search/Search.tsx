@@ -21,7 +21,7 @@ export const Search = () => {
 
   const handleSearch = async () => {
     if (!searchQuery) {
-      setError("Please enter an address or username.");
+      setError("Please enter an address, ENS or basename.");
       return;
     }
 
@@ -45,13 +45,21 @@ export const Search = () => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-3">
-      <AddressInput
-        value={searchQuery}
-        onChange={value => setSearchQuery(value.toLowerCase())}
-        placeholder="username, ENS or address"
-      />
+      <div onKeyDown={handleKeyDown}>
+        <AddressInput
+          value={searchQuery}
+          onChange={value => setSearchQuery(value.toLowerCase())}
+          placeholder="basename, ENS or address"
+        />
+      </div>
       <button onClick={handleSearch} disabled={loading} className="btn btn-primary px-6">
         {loading ? <LoadingBars /> : "Go"}
       </button>
