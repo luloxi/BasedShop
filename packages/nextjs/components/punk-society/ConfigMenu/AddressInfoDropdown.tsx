@@ -49,9 +49,7 @@ export const AddressInfoDropdown = ({ blockExplorerAddressLink }: AddressInfoDro
           className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
         >
           <NetworkOptions hidden={!selectingNetwork} />
-          <div className="hidden lg:flex items-center justify-center ">
-            <SwitchTheme />
-          </div>
+
           <li className={selectingNetwork ? "hidden" : ""}>
             <label
               htmlFor="qrcode-modal"
@@ -75,6 +73,9 @@ export const AddressInfoDropdown = ({ blockExplorerAddressLink }: AddressInfoDro
               </button>
             </li>
           ) : null}
+          <div className="hidden lg:flex items-center justify-center ">
+            <SwitchTheme />
+          </div>
           <li className={selectingNetwork ? "hidden" : ""}>
             <label htmlFor="switch-language-modal" className="btn-sm !rounded-xl flex gap-3 py-3">
               <LanguageIcon className="h-6 w-4 ml-2 sm:ml-0" />
