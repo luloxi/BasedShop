@@ -10,6 +10,7 @@ import {
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import { LanguageIcon } from "@heroicons/react/24/solid";
+import { SwitchTheme } from "~~/components/SwitchTheme";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
 
@@ -48,7 +49,9 @@ export const AddressInfoDropdown = ({ blockExplorerAddressLink }: AddressInfoDro
           className="dropdown-content menu z-[2] p-2 mt-2 shadow-center shadow-accent bg-base-200 rounded-box gap-1"
         >
           <NetworkOptions hidden={!selectingNetwork} />
-
+          <div className="hidden lg:flex items-center justify-center ">
+            <SwitchTheme />
+          </div>
           <li className={selectingNetwork ? "hidden" : ""}>
             <label
               htmlFor="qrcode-modal"
