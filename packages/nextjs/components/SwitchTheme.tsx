@@ -23,7 +23,7 @@ export const SwitchTheme = ({ className }: { className?: string }) => {
   return (
     <div
       onClick={handleToggle}
-      className={`flex cursor-pointer space-x-2 h-8 items-center hover:bg-[#C9D8E5] dark:hover:bg-[#193048] justify-start w-full rounded-lg pl-3 text-sm ${className}`}
+      className={`flex cursor-pointer space-x-2 h-8 items-center hover:bg-[#C9D8E5] dark:hover:bg-[#193048] justify-start w-full rounded-lg pl-5 lg:pl-3 text-sm ${className}`}
     >
       <button className="swap swap-rotate flex flex-row gap-2 justify-start items-center">
         {isDarkMode ? <MoonIcon className="h-5 w-5" /> : <SunIcon className="h-5 w-5" />}
