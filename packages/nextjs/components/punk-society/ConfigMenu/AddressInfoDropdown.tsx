@@ -73,7 +73,7 @@ export const AddressInfoDropdown = ({ blockExplorerAddressLink }: AddressInfoDro
               </button>
             </li>
           ) : null}
-          <div className="hidden lg:flex items-center justify-center ">
+          <div className="flex items-center justify-center ">
             <SwitchTheme />
           </div>
           <li className={selectingNetwork ? "hidden" : ""}>
